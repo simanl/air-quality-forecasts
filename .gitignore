@@ -1,0 +1,59 @@
+# Common Files:
+################################################################################
+# OSX files:
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+################################################################################
+# R-related files:
+
+# History files
+.Rhistory
+.Rapp.history
+
+# Example code in package build process
+*-Ex.R
+
+# RStudio files
+.Rproj.user/
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+################################################################################
+# Project files:
+
+# Packrat dependencies (Should be re-downloaded via packrat)
+packrat/*
+!packrat/init.R
+!packrat/packrat.lock
+!packrat/packrat.opts
+
+# Table (R Data) files:
+tablas/pronosticos/*
+tablas/series/*
+!tablas/**/.keep

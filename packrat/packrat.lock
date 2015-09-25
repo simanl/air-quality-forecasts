@@ -1,0 +1,69 @@
+PackratFormat: 1.4
+PackratVersion: 0.4.4
+RVersion: 3.2.1
+Repos: CRAN=http://cran.rstudio.com/
+
+Package: Rcpp
+Source: CRAN
+Version: 0.12.1
+Hash: 02ad87c166e4a92976052106e3826893
+
+Package: RcppArmadillo
+Source: CRAN
+Version: 0.5.600.2.0
+Hash: c95432373b520164a2dbaff199ed80ba
+Requires: Rcpp
+
+Package: chron
+Source: CRAN
+Version: 2.3-47
+Hash: d25d96d908cd21080f24c89eed4c80a0
+
+Package: colorspace
+Source: CRAN
+Version: 1.2-6
+Hash: 00bb12245cd975c450cc4a960884fa15
+
+Package: data.table
+Source: CRAN
+Version: 1.9.6
+Hash: f92ef1f73afa43bf6fd69a22f3794abd
+Requires: chron
+
+Package: forecast
+Source: CRAN
+Version: 6.1
+Hash: d88c8d6c66efe13ae96b78094c8d9a49
+Requires: Rcpp, RcppArmadillo, colorspace, fracdiff, timeDate, tseries,
+    zoo
+
+Package: fracdiff
+Source: CRAN
+Version: 1.4-2
+Hash: 75e1920799a698acf5912369675100af
+
+Package: packrat
+Source: CRAN
+Version: 0.4.4
+Hash: aed7d17407538df551a57caf6289c8bf
+
+Package: quadprog
+Source: CRAN
+Version: 1.5-5
+Hash: 69000b7dc41b09977dcf781f909d235c
+
+Package: timeDate
+Source: CRAN
+Version: 3012.100
+Hash: 78876c125c98033cd093fa0283469637
+
+Package: tseries
+Source: CRAN
+Version: 0.10-34
+Hash: 9907998383c7d39f42da6c3c84511e57
+Requires: quadprog, zoo
+
+Package: zoo
+Source: CRAN
+Version: 1.7-12
+Hash: 8ce4a89536cba4fa6023190959de5658
