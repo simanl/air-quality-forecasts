@@ -48,10 +48,8 @@ vignettes/*.pdf
 # Project files:
 
 # Packrat dependencies (Should be re-downloaded via packrat)
-packrat/*
-!packrat/init.R
-!packrat/packrat.lock
-!packrat/packrat.opts
+packrat/lib*/
+packrat/src
 
 # Table (R Data) files:
 tablas/pronosticos/*
