@@ -41,3 +41,6 @@ packrat/src
 tablas/pronosticos/*
 tablas/series/*
 !tablas/**/.keep
+# Temporary files:
+tmp/*
+!tmp/.keep
