@@ -26,6 +26,8 @@ Temporary Items
 # History files
 .Rhistory
 .Rapp.history
+# Ignore Workspace image:
+/.RData
 # Example code in package build process
 *-Ex.R
 # RStudio files
