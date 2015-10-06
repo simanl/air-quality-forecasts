@@ -1,3 +1,4 @@
+rm(list=ls())
 sourceDir <- function(path, trace = TRUE, ...){
   for (nm in list.files(path, pattern = "[.][R]$")){
     if(trace) cat(nm,":")

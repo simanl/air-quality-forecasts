@@ -7,11 +7,9 @@ stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado
                            modelos.pronostico, trans = function(x) log(x + 1), trans.inv = function(x) exp(x) - 1, image){
   objeto <- list()
   
-    #cargar el modelo de predicción
   if(missing(modelos.pronostico)) stop("Falta 'modelos', el cual no tiene valor predeterminado.")
 
   if(is.character(modelos.pronostico)){
-#     ruta <- paste(modelos.pronostico, "/pronostico_modelos_", contaminante, ".RData", sep = "")
     
     modelos.env <- new.env()
     load(modelos.pronostico, modelos.env)
@@ -21,18 +19,6 @@ stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado
     if(is.list(modelos.pronostico)) objeto$modelos.pronostico <- modelos.pronostico
       else stop("'modelos' es una ruta al directorio de modelos o una lista no vacia con modelos de pronostico")
    }
-
-#   if(is.character(modelos.met)){
-# #     ruta <- paste(modelos.pronostico, "/pronostico_modelos_", contaminante, ".RData", sep = "")
-#     
-#     modelos.env <- new.env()
-#     load(modelos.met, modelos.env)
-#     objeto$modelos.met<- as.list(modelos.env)
-#   }
-#    else{
-#     if(is.list(modelos.met)) objeto$modelos.met <- modelos.met
-#       else stop("'modelos' es una ruta al directorio de modelos o una lista no vacia con modelos de variables meteorlogicas")
-#    }
 
    
   ##chequeo de modelos
@@ -46,7 +32,6 @@ stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado
   tabla.horaria.sitio <- tabla.horaria[tabla.horaria$sitio == sitio, ]
 
   if(is.character(pesos)){
-#     pesos.csv <- read.csv("datos/pesos_contaminantes_v2.csv")
     pesos.csv <- read.csv(pesos)
     pesos <- pesos.csv[pesos.csv$sitio == sitio & pesos.csv$cont == contaminante, ]
   }
@@ -119,21 +104,7 @@ angulo.prom <- function(theta = 0, w = rep(1, length(theta))){
 ##renglon periodo calcula el periodo, lleva al final un control de que variables meteorologicas son promediadas
 ##presumiblemente esta funcion tendria que cambiar
 ##si otras variables son incluidas
-#tabla.horaria = tabla.horaria, pesos = df con pesos: sitio, X0 ... X5, cont, periodo
-# renglon.periodo <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado", pesos){
 renglon.periodo <- function(tabla.horaria.sitio, contaminante = "O3", pesos){
-# tabla.horaria <- as.data.frame(tabla.horaria)
-# cat('\nrenglon periodo0\n')
-# print(tabla.horaria$sitio == sitio)  
-# aux.logic <- tabla.horaria$sitio == sitio
-# site <- sitio
-#   tabla.horaria.sitio <- tabla.horaria[tabla.horaria$sitio == sitio,]
-#   tabla.horaria.sitio <- tabla.horaria[sitio == site,]
-
-#   tabla.horaria.sitio <- tabla.horaria[aux.logic,]
-
-# cat('\nrenglon periodo1\n')
-# print(tabla.horaria.sitio)  
 
   periodo <- as.character(tabla.horaria.sitio$periodo[1])
 # cat('\nrenglon periodo2\n')

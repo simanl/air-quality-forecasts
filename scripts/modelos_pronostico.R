@@ -157,30 +157,37 @@ Xreg.ArimaSIMA.EstPer.TRHWsWd <- function(modelo, tabla.periodos, modelos.var.me
     pronostico <- modelo.arima$trans.inv(pronostico.trans)
     return(pronostico)
    }
-
     #TOUT
-    pron.TOUT <- pronostico.univ.met(tabla.periodos$TOUT, obispado.arima.O3.tout)
+    arima.tout <- get(ls()[grep("arima.tout", ls())])
+    pron.TOUT <- pronostico.univ.met(tabla.periodos$TOUT, arima.tout)
     
     #HR
-    pron.HR <- pronostico.univ.met(tabla.periodos$HR, obispado.arima.O3.hr)
+    arima.hr <- get(ls()[grep("arima.hr", ls())])
+
+    pron.HR <- pronostico.univ.met(tabla.periodos$HR, arima.hr)
     aux <- pron.HR < 0
     pron.HR[aux] <- 0
     aux <- pron.HR > 100
     pron.HR[aux] <- 100
     
     #SR
-    pron.SR <- pronostico.univ.met(tabla.periodos$SR, obispado.arima.O3.sr)
+    arima.sr <- get(ls()[grep("arima.sr", ls())])
+
+    pron.SR <- pronostico.univ.met(tabla.periodos$SR, arima.sr)
     aux <- pron.SR < 0
     pron.SR[aux] <- 0
     
     #WS
-    pron.WS <- pronostico.univ.met(tabla.periodos$WS, obispado.arima.O3.ws)
+    arima.ws <- get(ls()[grep("arima.ws", ls())])    
+    pron.WS <- pronostico.univ.met(tabla.periodos$WS, arima.ws)
     aux <- pron.WS < 0
     pron.WS[aux] <- 0
     
     #WDR
-    pron.sin.wdr <- pronostico.univ.met(tabla.periodos$WDR, obispado.arima.O3.sin.wdr)
-    pron.cos.wdr <- pronostico.univ.met(tabla.periodos$WDR, obispado.arima.O3.cos.wdr)
+    arima.sin.wdr <- get(ls()[grep("arima.sin.wdr", ls())])    
+    pron.sin.wdr <- pronostico.univ.met(sin(tabla.periodos$WDR*pi/180), arima.sin.wdr)
+    arima.cos.wdr <- get(ls()[grep("arima.cos.wdr", ls())])        
+    pron.cos.wdr <- pronostico.univ.met(cos(tabla.periodos$WDR*pi/180), arima.cos.wdr)
     pron.WDR <- atan2(x = pron.cos.wdr, y = pron.sin.wdr) * 180/pi
     aux <- pron.WDR < 0
     pron.WDR[aux] <- pron.WDR[aux] + 360
@@ -189,7 +196,7 @@ Xreg.ArimaSIMA.EstPer.TRHWsWd <- function(modelo, tabla.periodos, modelos.var.me
     return(matriz.X.met)
   }
 
-  xreg.pron.met <- pronostico.xreg.met(O3Obispado$tabla.periodos.sitio)
+  xreg.pron.met <- pronostico.xreg.met(tabla.periodos)
   matriz.X <- cbind(xreg.pron.temp, xreg.pron.met)
   colnames(matriz.X) <- c("(Intercept)", "Otono", "Primavera", "Verano",
                           "06 a 11", "12 a 17", "18 a 23", "TOUT", "HR", "SR", "WS", "WDR")
@@ -202,22 +209,44 @@ pronostico <- function(x, ...)
 pronostico.stSIMA <- function(x, ...){
   modelos <- x$modelos.pronostico
   tabla.periodos <- x$tabla.periodos.sitio
+#   contaminante <- tabla.periodos[ , x$contaminante]
+# print(head(contaminante))  
+#   modelos <- lapply(modelos, function(x, y) {x$x <- y; return(x)}, contaminante)
+# print(head(modelos[[1]]$x))  
   lista.pronosticos <- lapply(modelos, pronostico, tabla.periodos, ...)
+# print(lista.pronosticos)
+#   lista.pronosticos <- lapply(lista.pronosticos, function(x, y) y(x), x$trans.inv)
+# print(lista.pronosticos)    
   return(lista.pronosticos)
 }
 
-pronostico.ArimaSIMA.EstPer.TRHWsWd <- function(modelo, tabla.periodos, modelos.var.met){
+pronostico.ArimaSIMA.EstPer.TRHWsWd <- function(modelo, tabla.periodos, modelos.var.met, ...){
   require(forecast)
   matrix.X <- Xreg(modelo, tabla.periodos, modelos.var.met)
+# print(modelo$x)
+  contaminante <- tabla.periodos[ , modelo$contaminante]
+print(tail(contaminante))
+  modelo$x <- modelo$trans(contaminante)
   pronostico <- forecast(modelo, h = 4, xreg = matrix.X)
+  pronostico.vector <- modelo$trans.inv(pronostico$mean)
+# print(pronostico)
   pronostico$descripcion <- modelo$descripcion
-  class(pronostico) <- c("pronosticoSIMA", class(pronostico))
-  return(pronostico)
+  attr(pronostico.vector, "forecast.obj") <- pronostico
+  class(pronostico.vector) <- c("pronosticoSIMA")
+  return(pronostico.vector)
 }
 
-print.pronosticoSIMA <- function(x){
-  if(!is.null(x$descripcion)) cat("\n", x$descripcion, "\n")
-  print(as.data.frame(x))
+as.data.frame.pronosticoSIMA <- function(x, ...){
+  as.data.frame(c(x))
 }
+
+# print.pronosticoSIMA <- function(x, ...){
+#   if(!is.null(attr(x, "forecast.obj"))){
+#     forecast.obj <- attr(x, "forecast.obj")
+#     if(!is.null(forecast.obj$descripcion)) cat("\n", x$descripcion, "\n")    
+#   }
+#   print(as.data.frame(attr(x, "forecast.obj")))
+# }
+
 
 
