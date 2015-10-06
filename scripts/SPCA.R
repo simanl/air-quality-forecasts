@@ -39,7 +39,7 @@ SPCA.default <- function(SPCA_HOME = "~/SPCA", entrada, salida){
   tabla.entrada.cols.adicionales <- colsTemp(tabla.entrada)
   
 ##imputacion
-  imputaciones <- imputacion(tabla.entrada.cols.adicionales, datos.historicos.wdf, modelos.dir = "~/SPCA/modelos/modelos_de_imputacion")
+  imputaciones <- imputacion(tabla.entrada.cols.adicionales, datos.historicos.wdf, modelos.dir = "modelos/modelos_de_imputacion")
 
 ##actualizacion de las series: periodos y modelos
   O3Obispado <- update(O3Obispado, tail(imputaciones, 30))
@@ -53,7 +53,19 @@ SPCA.default <- function(SPCA_HOME = "~/SPCA", entrada, salida){
   PM10Nicolas <- update(PM10Nicolas, tail(imputaciones, 30))
   PM10Bernabe <- update(PM10Bernabe, tail(imputaciones, 30))
   PM10Catarina <- update(PM10Catarina, tail(imputaciones, 30))
-  
+
+  save(O3Obispado, file = "tablas/series/O3Obispado.RData")
+  save(O3Pastora, file = "tablas/series/O3Pastora.RData")
+  save(O3Bernabe, file = "tablas/series/O3Bernabe.RData")
+  save(O3Catarina, file = "tablas/series/O3Catarina.RData")
+  save(O3Nicolas, file = "tablas/series/O3Nicolas.RData")
+    
+  save(PM10Obispado, file = "tablas/series/PM10Obispado.RData")
+  save(PM10Pastora, file = "tablas/series/PM10Pastora.RData")
+  save(PM10Bernabe, file = "tablas/series/PM10Bernabe.RData")
+  save(PM10Catarina, file = "tablas/series/PM10Catarina.RData")
+  save(PM10Nicolas, file = "tablas/series/PM10Nicolas.RData")
+
 # debug(pronostico.stSIMA)
 ##pronostico de las series
   O3Obispado.pronostico <- as.data.frame(pronostico(O3Obispado, modelos.var.met = "modelos/modelos_de_pronostico/modelos_pronostico_met_O3_obispado.RData"))
