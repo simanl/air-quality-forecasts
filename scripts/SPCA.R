@@ -37,7 +37,9 @@ SPCA.default <- function(SPCA_HOME = "~/SPCA", entrada, salida){
 
 ##columnas adicionales (variables de calendario y estaciones)
   tabla.entrada.cols.adicionales <- colsTemp(tabla.entrada)
-  
+##guarda la tabla maestra
+  tabla.maestra <- rbind(tabla.maestra, tabla.entrada.cols.adicionales)
+  save(tabla.maestra, "tablas/series/tabla_maestra.RData")  
 ##imputacion
   imputaciones <- imputacion(tabla.entrada.cols.adicionales, datos.historicos.wdf, modelos.dir = "modelos/modelos_de_imputacion")
 
