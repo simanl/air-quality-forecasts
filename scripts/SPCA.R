@@ -7,7 +7,7 @@ SPCA.default <- function(SPCA_HOME = "~/SPCA", entrada, salida){
 
 ##lectura de tabla de entrada
   if(missing(entrada))
-    tabla.entrada <- as.data.frame(get(tabla.entrada, envir = .GlobalEnv))
+    tabla.entrada <- lecturaCSV(as.data.frame(get(tabla.entrada, envir = .GlobalEnv)))
     else
       tabla.entrada <- lecturaCSV(substitute(entrada))
 
@@ -39,7 +39,7 @@ SPCA.default <- function(SPCA_HOME = "~/SPCA", entrada, salida){
   tabla.entrada.cols.adicionales <- colsTemp(tabla.entrada)
 ##guarda la tabla maestra
   tabla.maestra <- rbind(tabla.maestra, tabla.entrada.cols.adicionales)
-  save(tabla.maestra, "tablas/series/tabla_maestra.RData")  
+  save(tabla.maestra, file = "tablas/series/tabla_maestra.RData")  
 ##imputacion
   imputaciones <- imputacion(tabla.entrada.cols.adicionales, datos.historicos.wdf, modelos.dir = "modelos/modelos_de_imputacion")
 
