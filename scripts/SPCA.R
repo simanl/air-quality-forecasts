@@ -1,9 +1,10 @@
 SPCA <- function(x, ...)
   UseMethod("SPCA")
 
-SPCA.default <- function(SPCA_HOME = "~/SPCA", entrada, salida){
+SPCA.default <- function(SPCA_HOME, entrada, salida){
 ##SCPA_HOME
-  setwd(SPCA_HOME)
+  if(!missing(SPCA_HOME))
+    setwd(SPCA_HOME)
 
 ##lectura de tabla de entrada
   if(missing(entrada))
