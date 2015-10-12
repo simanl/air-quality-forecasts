@@ -23,6 +23,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 # R-related files:
+#out  batch log file
+scipt_corrida.Rout
 # History files
 .Rhistory
 .Rapp.history
