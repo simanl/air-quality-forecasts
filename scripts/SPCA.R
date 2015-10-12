@@ -5,7 +5,11 @@ SPCA.default <- function(SPCA_HOME, entrada, salida){
 ##SCPA_HOME
   if(!missing(SPCA_HOME))
     setwd(SPCA_HOME)
+    else
+      SPCA_HOME <- getwd()
 
+# print(SPCA_HOME)
+      
 ##lectura de tabla de entrada
   if(missing(entrada))
     tabla.entrada <- lecturaCSV(as.data.frame(get(tabla.entrada, envir = .GlobalEnv)))
@@ -15,12 +19,16 @@ SPCA.default <- function(SPCA_HOME, entrada, salida){
   
 ##datos historicos horarios
   load("tablas/series/tabla_maestra.RData", .GlobalEnv) #tabla maestra final (horaria) con solo los sitios de interes
-  system(paste("cp ", SPCA_HOME, "/tablas/series/tabla_maestra.RData ", SPCA_HOME, "/tablas/series/tabla_maestra.RData.bkp", sep = ""), intern = T)
+#  system(paste("cp ", SPCA_HOME, "/tablas/series/tabla_maestra.RData ", SPCA_HOME, "/tablas/series/tabla_maestra.RData.bkp", sep = ""), intern = T)
+  system(paste("cp ", "../tablas/series/tabla_maestra.RData ", "../tablas/series/tabla_maestra.RData.bkp", sep = ""), intern = T)
+
   datos.historicos.wdf <- tabla.maestra[(nrow(tabla.maestra) - 200):nrow(tabla.maestra), ] #se seleccionan los 200 ultimos para hacer la imputacion
 
 ##datos historicos imputados
   load("tablas/series/tabla_maestra_imputada.RData", .GlobalEnv) #tabla maestra final (horaria) imputada con solo los sitios de interes
-  system(paste("cp ", SPCA_HOME, "/tablas/series/tabla_maestra_imputada.RData ", SPCA_HOME, "/tablas/series/tabla_maestra_imputada.RData.bkp", sep = ""), intern = T)
+#  system(paste("cp ", SPCA_HOME, "/tablas/series/tabla_maestra_imputada.RData ", SPCA_HOME, "/tablas/series/tabla_maestra_imputada.RData.bkp", sep = ""), intern = T)
+  system(paste("cp ", "../tablas/series/tabla_maestra_imputada.RData ", "../tablas/series/tabla_maestra_imputada.RData.bkp", sep = ""), intern = T)
+
   load("tablas/series/O3Obispado.RData", .GlobalEnv)
   load("tablas/series/O3Pastora.RData", .GlobalEnv)
   load("tablas/series/O3Nicolas.RData", .GlobalEnv)
@@ -40,7 +48,7 @@ SPCA.default <- function(SPCA_HOME, entrada, salida){
   tabla.entrada.cols.adicionales <- colsTemp(tabla.entrada)
 ##guarda la tabla maestra
   tabla.maestra <- rbind(tabla.maestra, tabla.entrada.cols.adicionales)
-  save(tabla.maestra, file = "tablas/series/tabla_maestra.RData")  
+#   save(tabla.maestra, file = "tablas/series/tabla_maestra.RData")  
 ##imputacion
   imputaciones <- imputacion(tabla.entrada.cols.adicionales, datos.historicos.wdf, modelos.dir = "modelos/modelos_de_imputacion")
 
@@ -57,17 +65,17 @@ SPCA.default <- function(SPCA_HOME, entrada, salida){
   PM10Bernabe <- update(PM10Bernabe, tail(imputaciones, 30))
   PM10Catarina <- update(PM10Catarina, tail(imputaciones, 30))
 
-  save(O3Obispado, file = "tablas/series/O3Obispado.RData")
-  save(O3Pastora, file = "tablas/series/O3Pastora.RData")
-  save(O3Bernabe, file = "tablas/series/O3Bernabe.RData")
-  save(O3Catarina, file = "tablas/series/O3Catarina.RData")
-  save(O3Nicolas, file = "tablas/series/O3Nicolas.RData")
-    
-  save(PM10Obispado, file = "tablas/series/PM10Obispado.RData")
-  save(PM10Pastora, file = "tablas/series/PM10Pastora.RData")
-  save(PM10Bernabe, file = "tablas/series/PM10Bernabe.RData")
-  save(PM10Catarina, file = "tablas/series/PM10Catarina.RData")
-  save(PM10Nicolas, file = "tablas/series/PM10Nicolas.RData")
+#   save(O3Obispado, file = "tablas/series/O3Obispado.RData")
+#   save(O3Pastora, file = "tablas/series/O3Pastora.RData")
+#   save(O3Bernabe, file = "tablas/series/O3Bernabe.RData")
+#   save(O3Catarina, file = "tablas/series/O3Catarina.RData")
+#   save(O3Nicolas, file = "tablas/series/O3Nicolas.RData")
+#     
+#   save(PM10Obispado, file = "tablas/series/PM10Obispado.RData")
+#   save(PM10Pastora, file = "tablas/series/PM10Pastora.RData")
+#   save(PM10Bernabe, file = "tablas/series/PM10Bernabe.RData")
+#   save(PM10Catarina, file = "tablas/series/PM10Catarina.RData")
+#   save(PM10Nicolas, file = "tablas/series/PM10Nicolas.RData")
 
 # debug(pronostico.stSIMA)
 ##pronostico de las series

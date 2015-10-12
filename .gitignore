@@ -46,3 +46,7 @@ tablas/series/*
 # Temporary files:
 tmp/*
 !tmp/.keep
+# Browser files:
+/.directory
+
+

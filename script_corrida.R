@@ -7,5 +7,6 @@ sourceDir <- function(path, trace = TRUE, ...){
   }
 }
 
-sourceDir("~/SPCA/scripts")
-SPCA(entrada = "~/SPCA/tablas/series/entrada.csv", salida = "salida.csv")
+sourceDir("scripts/")
+SPCA(entrada = "~/SPCA/air-quality-forecast-engine/ejemplos/entrada.csv")
+post()
