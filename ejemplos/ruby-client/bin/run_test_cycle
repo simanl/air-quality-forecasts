@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: run_test_cycle [options]"
+
+  opts.on("-c N", "--cycle N", "Cycle to run") do |cycle_to_run|
+    options[:cycle_to_run] = cycle_to_run.to_s
+  end
+
+end.parse!
+
+require './engine_client'
+EngineClient.new.run_test_cycle options[:cycle_to_run]

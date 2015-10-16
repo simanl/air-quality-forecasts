@@ -52,3 +52,4 @@ tablas/series/*
 tmp/*
 # Browser files:
 /.directory
+ejemplos/ruby-client/tmp/*
