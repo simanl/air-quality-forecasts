@@ -1,0 +1,14 @@
+.git/
+.gitignore
+
+ejemplos/
+packrat/lib*
+packrat/src
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+tablas/pronosticos/*
+!tablas/pronosticos/.keep
+tablas/series/*
+!tablas/series/.keep
