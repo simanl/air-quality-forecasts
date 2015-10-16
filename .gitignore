@@ -46,9 +46,9 @@ tablas/pronosticos/*
 tablas/series/*
 !tablas/**/.keep
 # Temporary files:
-tmp/*
 !tmp/.keep
+!tmp/download-sample-data.sh
+!tmp/sample-data/.keep
+tmp/*
 # Browser files:
 /.directory
-
-
