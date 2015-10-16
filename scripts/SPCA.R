@@ -12,22 +12,22 @@ SPCA.default <- function(SPCA_HOME, entrada, salida){
       
 ##lectura de tabla de entrada
   if(missing(entrada))
-    tabla.entrada <- lecturaCSV(as.data.frame(get(tabla.entrada, envir = .GlobalEnv)))
+    tabla.entrada <- lecturaCSV(as.data.frame(get("tabla.entrada", envir = .GlobalEnv)))
     else
       tabla.entrada <- lecturaCSV(substitute(entrada))
 
   
 ##datos historicos horarios
   load("tablas/series/tabla_maestra.RData", .GlobalEnv) #tabla maestra final (horaria) con solo los sitios de interes
-#  system(paste("cp ", SPCA_HOME, "/tablas/series/tabla_maestra.RData ", SPCA_HOME, "/tablas/series/tabla_maestra.RData.bkp", sep = ""), intern = T)
-  system(paste("cp ", "../tablas/series/tabla_maestra.RData ", "../tablas/series/tabla_maestra.RData.bkp", sep = ""), intern = T)
+  system(paste("cp ", SPCA_HOME, "/tablas/series/tabla_maestra.RData ", SPCA_HOME, "/tablas/series/tabla_maestra.RData.bkp", sep = ""), intern = T)
+#  system(paste("cp ", "../tablas/series/tabla_maestra.RData ", "../tablas/series/tabla_maestra.RData.bkp", sep = ""), intern = T)
 
   datos.historicos.wdf <- tabla.maestra[(nrow(tabla.maestra) - 200):nrow(tabla.maestra), ] #se seleccionan los 200 ultimos para hacer la imputacion
 
 ##datos historicos imputados
   load("tablas/series/tabla_maestra_imputada.RData", .GlobalEnv) #tabla maestra final (horaria) imputada con solo los sitios de interes
-#  system(paste("cp ", SPCA_HOME, "/tablas/series/tabla_maestra_imputada.RData ", SPCA_HOME, "/tablas/series/tabla_maestra_imputada.RData.bkp", sep = ""), intern = T)
-  system(paste("cp ", "../tablas/series/tabla_maestra_imputada.RData ", "../tablas/series/tabla_maestra_imputada.RData.bkp", sep = ""), intern = T)
+  system(paste("cp ", SPCA_HOME, "/tablas/series/tabla_maestra_imputada.RData ", SPCA_HOME, "/tablas/series/tabla_maestra_imputada.RData.bkp", sep = ""), intern = T)
+#  system(paste("cp ", "../tablas/series/tabla_maestra_imputada.RData ", "../tablas/series/tabla_maestra_imputada.RData.bkp", sep = ""), intern = T)
 
   load("tablas/series/O3Obispado.RData", .GlobalEnv)
   load("tablas/series/O3Pastora.RData", .GlobalEnv)
