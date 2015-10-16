@@ -1,0 +1,25 @@
+---
+engine:
+  image: r-base:3.2.1
+  volumes: [ ".:/app" ]
+  working_dir: /app
+  command: Rscript start.R -- --bootstrap-packrat
+  expose: [ 6311 ]
+
+# Cliente de prueba:
+client_gems: &app_base
+  image: ruby:2.2.3
+  volumes:
+    - ./ejemplos/ruby-client:/usr/src/app
+    - /usr/local/bundle
+    - ./tmp/sample-data:/sample-data
+  working_dir: /usr/src/app
+  links: [ "engine:engine.example.com" ]
+  environment:
+    ENGINE_URL: tcp://engine.example.com:6311 # The URL pointing to our engine container
+
+client:
+  <<: *app_base
+  volumes_from: [ "client_gems" ]
+  entrypoint: /usr/src/app/entrypoint.sh
+  command: bundle console
