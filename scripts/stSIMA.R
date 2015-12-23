@@ -10,7 +10,6 @@ stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado
   if(missing(modelos.pronostico)) stop("Falta 'modelos', el cual no tiene valor predeterminado.")
 
   if(is.character(modelos.pronostico)){
-    
     modelos.env <- new.env()
     load(modelos.pronostico, modelos.env)
     objeto$modelos.pronostico <- as.list(modelos.env)
@@ -115,30 +114,44 @@ renglon.periodo <- function(tabla.horaria.sitio, contaminante = "O3", pesos){
 # print(pesos)  
 
   maximo <- max(tabla.horaria.sitio[ ,contaminante])
-  aux <- which(tabla.horaria.sitio[ ,contaminante] == maximo)[1]
+  if(is.na(maximo))
+    aux <- which(is.na(tabla.horaria.sitio[ ,contaminante]))[1]
+    else
+      aux <- which(tabla.horaria.sitio[ ,contaminante] == maximo)[1]
   df.salida <- tabla.horaria.sitio[aux,]
 # cat('\nrenglon periodo4\n')
 # print(tabla.horaria$HR)  
-  
+  df.salida$TOUT <- weighted.mean(tabla.horaria.sitio$TOUT, pesos)
   df.salida$HR <- weighted.mean(tabla.horaria.sitio$HR, pesos)
   df.salida$WS <- weighted.mean(tabla.horaria.sitio$WS, pesos)
   df.salida$SR <- weighted.mean(tabla.horaria.sitio$SR, pesos)
   df.salida$WDR <- angulo.prom(theta = tabla.horaria.sitio$WDR, w = pesos)
+  df.salida$NOX <- weighted.mean(tabla.horaria.sitio$NOX, pesos)
   
-  if(sum(is.na(tabla.horaria.sitio$TOUT)) == 0){
-    df.salida$TOUT <- weighted.mean(tabla.horaria.sitio$TOUT, pesos)
-  } else {
-    df.salida$TOUT <- tabla.horaria.sitio[aux, "TOUT"] 
-  }
+#   if(sum(is.na(tabla.horaria.sitio$TOUT)) == 0){
+#     df.salida$TOUT <- weighted.mean(tabla.horaria.sitio$TOUT, pesos)
+#   } else {
+#     df.salida$TOUT <- tabla.horaria.sitio[aux, "TOUT"] 
+#   }
   
   if(contaminante == "O3"){
     df.salida$O3 <- maximo
     df.salida$PM10 <- weighted.mean(tabla.horaria.sitio$PM10, pesos)
-  } else if (contaminante == "PM10"){
-    df.salida$PM10 <- maximo
-    df.salida$O3 <- weighted.mean(tabla.horaria.sitio$O3, pesos)
+    df.salida$PM2.5 <- weighted.mean(tabla.horaria.sitio$PM2.5, pesos)
   }
-  attr(df.salida, "met.prom.pond") <- c("HR", "WS", "SR", "WDR", "TOUT")
+    else{
+      if(contaminante == "PM10"){
+	df.salida$PM10 <- maximo
+	df.salida$O3 <- weighted.mean(tabla.horaria.sitio$O3, pesos)
+	df.salida$PM2.5 <- weighted.mean(tabla.horaria.sitio$PM2.5, pesos)    
+      }
+      else{
+	df.salida$PM10 <- weighted.mean(tabla.horaria.sitio$PM10, pesos)    
+	df.salida$O3 <- weighted.mean(tabla.horaria.sitio$O3, pesos)
+	df.salida$PM2.5 <- maximo    
+      }
+  }
+  attr(df.salida, "met.prom.pond") <- c("HR", "WS", "SR", "WDR", "TOUT", "NOX")
   return(df.salida)
 }
 

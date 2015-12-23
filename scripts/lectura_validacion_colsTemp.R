@@ -1,25 +1,19 @@
-lecturaCSV <- function(x, ...)
-  UseMethod("lecturaCSV")
+READ <- function(x, ...)
+  UseMethod("READ")
 
-lecturaCSV.default <- function(file, header = TRUE, sep = ",", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...){
+READ.default <- function(file, tm.ur, header = TRUE, sep = ",", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...){
   mc <- as.list(match.call(expand.dots = T))
   mc$file <- file
-  tabla <- do.call("read.csv", mc[-1L])
-  tabla.nombres <- c("fecha","hora","sitio","CO","NO","NO2","NOX","O3","PM10","PM2.5","PRS","RAINF","HR","SO2","SR","TOUT","WS","WDR")
-  if(nrow(tabla)!= 30) stop("Tabla de datos no es de seis horas por cinco sitios.") 
-  if(ncol(tabla)!= 18) stop("Tabla de datos no tiene 18 columnas.")
-  if(!all(colnames(tabla) %in% tabla.nombres)) stop("Nombres de columna no son los apropiados.")
+  tabla <- do.call("read.csv", mc[-c(1L, 3L)])
+  init.check(tabla, tm.ur)
   attr(tabla, "validacion") <- FALSE
   attr(tabla, "completa") <- FALSE
   class(tabla) <- c("datos.SIMA", "data.frame")
   return(tabla)
 }
 
-lecturaCSV.data.frame <- function(x, ...){
-  x.nombres <- c("fecha","hora","sitio","CO","NO","NO2","NOX","O3","PM10","PM2.5","PRS","RAINF","HR","SO2","SR","TOUT","WS","WDR")
-  if(nrow(x)!= 30) stop("Tabla de datos no es de seis horas por cinco sitios.") 
-  if(ncol(x)!= 18) stop("Tabla de datos no tiene 18 columnas.")
-  if(!all(colnames(x) %in% x.nombres)) stop("Nombres de columna no son los apropiados.")
+READ.data.frame <- function(x, tm.ur, ...){
+  init.check(x, tm.ur)
   attr(x, "validacion") <- FALSE
   attr(x, "completa") <- FALSE
   class(x) <- c("datos.SIMA", "data.frame")
@@ -78,13 +72,6 @@ validacion.datos.SIMA <- function(x, ...){
     x$PM2.5[cuales] <- NA
   }
   
-  ## que vengan 6 horas por cada sitio
-  if(sum(x$sitio == "La Pastora") != 6) stop ("Sitio La Pastora no contiene 6 horas.")
-  if(sum(x$sitio == "Obispado") != 6) stop ("Sitio Obispado no contiene 6 horas.")
-  if(sum(x$sitio == "San Bernabe") != 6) stop ("Sitio San Bernabe no contiene 6 horas.")
-  if(sum(x$sitio == "San Nicolas") != 6) stop ("Sitio San Nicolas no contiene 6 horas.")
-  if(sum(x$sitio == "Santa Catarina") != 6) stop ("Sitio Santa Catarina no contiene 6 horas.")
-    
   attr(x, "validacion") <- TRUE
   return(x)
 }
@@ -95,9 +82,11 @@ colsTemp <- function(x, ...)
 colsTemp.datos.SIMA <- function(x, ...){
   x$fecha <- as.Date(x$fecha)
   dia <- format(x$fecha, format = "%d")
-  mes <- format(x$fecha, format = "%B")
+  mes <- factor(format(x$fecha, format = "%B"), levels = c("January", "February", "March", "April", "May", "June", "July",
+    "August", "September", "October", "November", "December"))
   ano <- format(x$fecha, format = "%Y")
-  diaSem <- weekdays(x$fecha)
+#   diaSem <- weekdays(x$fecha)
+  diaSem <- factor(weekdays(x$fecha), levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
   
   getSeason <- function(DATES) {
     WS <- as.Date("2012-12-21", format = "%Y-%m-%d") # Invierno
@@ -132,12 +121,12 @@ colsTemp.datos.SIMA <- function(x, ...){
   dia <- as.numeric(dia)
   ano <- as.numeric(ano)
   
-  aux <- mes == "diciembre" & dia >= 21
+  aux <- mes == "December" & dia >= 21
   ano.temp <- ano
   ano.temp[aux] <- ano[aux] + 1
   estacion.ano <- paste(estacion, ano.temp, sep = "-")
   
-  aux <- mes == "diciembre"
+  aux <- mes == "December"
   ano.temp <- ano
   ano.temp[aux] <- ano[aux] + 1 
   estacion.mes.ano <- paste(estacion.mes, ano.temp, sep = "-")
@@ -173,9 +162,11 @@ colsTemp.datos.SIMA <- function(x, ...){
 colsTemp.data.frame <- function(x, ...){
   x$fecha <- as.Date(x$fecha)
   dia <- format(x$fecha, format = "%d")
-  mes <- format(x$fecha, format = "%B")
+  mes <- factor(format(x$fecha, format = "%B"), levels = c("January", "February", "March", "April", "May", "June", "July",
+    "August", "September", "October", "November", "December"))
   ano <- format(x$fecha, format = "%Y")
-  diaSem <- weekdays(x$fecha)
+#   diaSem <- weekdays(x$fecha)
+  diaSem <- factor(weekdays(x$fecha), levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
   
   getSeason <- function(DATES) {
     WS <- as.Date("2012-12-21", format = "%Y-%m-%d") # Invierno
@@ -210,12 +201,12 @@ colsTemp.data.frame <- function(x, ...){
   dia <- as.numeric(dia)
   ano <- as.numeric(ano)
   
-  aux <- mes == "diciembre" & dia >= 21
+  aux <- mes == "December" & dia >= 21
   ano.temp <- ano
   ano.temp[aux] <- ano[aux] + 1
   estacion.ano <- paste(estacion, ano.temp, sep = "-")
   
-  aux <- mes == "diciembre"
+  aux <- mes == "December"
   ano.temp <- ano
   ano.temp[aux] <- ano[aux] + 1 
   estacion.mes.ano <- paste(estacion.mes, ano.temp, sep = "-")
@@ -249,4 +240,35 @@ colsTemp.data.frame <- function(x, ...){
   return(tabla)
 }
 
+init.check <- function(tabla, tm.ur, ...)
+  UseMethod("init.check")
 
+init.check.default <- function(tabla, tm.ur, ...){
+  tabla.nombres <- c("fecha","hora","sitio","CO","NO","NO2","NOX","O3","PM10","PM2.5","PRS","RAINF","HR","SO2","SR","TOUT","WS","WDR")
+  if(nrow(tabla)!= 30) stop("Tabla de datos no es de seis horas por cinco sitios.") 
+  if(ncol(tabla)!= 18) stop("Tabla de datos no tiene 18 columnas.")
+  if(!all(colnames(tabla) %in% tabla.nombres)) stop("Nombres de columna no son los apropiados.")
+  if(length(unique(tabla$sitio))!=5) stop("Tabla de datos no tiene exactamente 5 sitios.")
+  
+  fecha.tabla.maestra <- as.Date(tm.ur$fecha)
+  hora.tabla.maestra <- as.integer(tm.ur$hora)
+
+  ##chequeo de continuidad
+  for(i in unique(tabla$sitio)){
+    tabla.sitio <-tabla[tabla$sitio == i, ]
+    if(nrow(tabla.sitio)!=6) stop("Al menos el Sitio", i, "no contiene 6 horas exactamente.")
+    if(any(diff(tabla.sitio$hora) != 1)) stop(paste("Al menos el Sitio", i, "no contiene horas contiguas o en orden."))
+    juliano.actual <- julian(as.Date(tabla.sitio$fecha))
+# cat("\njuliano actual", juliano.actual)
+    juliano.anterior <- julian(as.Date(fecha.tabla.maestra))
+# cat("\njuliano anterior",juliano.anterior)
+    if(length(unique(juliano.actual)) > 1) stop(paste("Al menos el Sitio", i, "contiene fechas con mas de una dia."))
+    if(juliano.actual[1] - juliano.anterior > 1 || juliano.actual[1] - juliano.anterior < 0 ) stop(paste("Al menos el Sitio", i, "no contiene fechas (dias) consecutivas con el historico."))
+     if(juliano.actual[1] - juliano.anterior == 1){
+      if(hora.tabla.maestra != 23 || tabla.sitio$hora[1] != 0) stop(paste("Al menos el Sitio", i, "no contiene horas consecutivas con el historico (o el historico no se actualizo la ultima vez o la nueva tabla no es consecutiva)."))
+    }
+    if(juliano.actual[1] - juliano.anterior == 0){
+      if(hora.tabla.maestra + 1 != tabla.sitio$hora[1]) stop(paste("Al menos el Sitio", i, "no contiene horas consecutivas con el historico."))
+    }
+  }
+}

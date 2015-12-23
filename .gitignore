@@ -34,6 +34,7 @@ scipt_corrida.Rout
 *-Ex.R
 # RStudio files
 .Rproj.user/
+air-quality-forecast-engine.Rproj
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
