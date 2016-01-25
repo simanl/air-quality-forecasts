@@ -366,14 +366,30 @@ Xreg.ArimaSIMA.O3Obispado <- function(modelo, tabla.periodos, modelos.var.met){
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+#   tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+#     data = df, split = "gini")
+#   tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+#   tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+#   
+#   df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+#   tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+  try.res <- try({tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
   
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
-
   X <- model.matrix( ~ mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR.rot + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))
   X.new <- model.matrix( ~ mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR.rot + tree.pred,
@@ -533,7 +549,7 @@ Xreg.ArimaSIMA.PM10Obispado <- function(modelo, tabla.periodos, modelos.var.met)
   data.frame.pron.met <- pronostico.xreg.met(tabla.periodos)
 
   contaminante <- tabla.periodos[ , modelo$contaminante]
-  O3.96 <- contaminante >= 96
+  PM10.76 <- contaminante >= 76
   WDR <- tabla.periodos$WDR
 #   seno <- sin(WDR*pi/180)
 #   coseno <- cos(WDR*pi/180)
@@ -549,13 +565,29 @@ Xreg.ArimaSIMA.PM10Obispado <- function(modelo, tabla.periodos, modelos.var.met)
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+  try.res <- try({tree(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
+#   tree.fit <- tree(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+#     data = df, split = "gini")
+#   tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+#   tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
   
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+#   df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+#   tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
 
   X <- model.matrix( ~ mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR.rot + I(WDR.rot^2) + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))
@@ -728,13 +760,22 @@ Xreg.ArimaSIMA.O3Pastora <- function(modelo, tabla.periodos, modelos.var.met){
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
-  
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+  try.res <- try({tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
 
   X <- model.matrix( ~ mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR.rot + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))
@@ -891,7 +932,7 @@ Xreg.ArimaSIMA.PM10Pastora <- function(modelo, tabla.periodos, modelos.var.met){
   data.frame.pron.met <- pronostico.xreg.met(tabla.periodos)
 
   contaminante <- tabla.periodos[ , modelo$contaminante]
-  O3.96 <- contaminante >= 96
+  PM10.76 <- contaminante >= 76
   WDR <- tabla.periodos$WDR
 #   seno <- sin(WDR*pi/180)
 #   coseno <- cos(WDR*pi/180)
@@ -907,13 +948,22 @@ Xreg.ArimaSIMA.PM10Pastora <- function(modelo, tabla.periodos, modelos.var.met){
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
-  
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+  try.res <- try({tree(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
 
   X <- model.matrix( ~ mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR.rot + I(WDR.rot^2) + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))
@@ -1087,13 +1137,22 @@ Xreg.ArimaSIMA.O3Catarina <- function(modelo, tabla.periodos, modelos.var.met){
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR.rot,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
-  
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+  try.res <- try({tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
 
   X <- model.matrix( ~ mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR.rot + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))
@@ -1250,7 +1309,7 @@ Xreg.ArimaSIMA.PM10Catarina <- function(modelo, tabla.periodos, modelos.var.met)
   data.frame.pron.met <- pronostico.xreg.met(tabla.periodos)
 
   contaminante <- tabla.periodos[ , modelo$contaminante]
-  O3.96 <- contaminante >= 96
+  PM10.76 <- contaminante >= 76
   WDR <- tabla.periodos$WDR
 #   seno <- sin(WDR*pi/180)
 #   coseno <- cos(WDR*pi/180)
@@ -1266,13 +1325,22 @@ Xreg.ArimaSIMA.PM10Catarina <- function(modelo, tabla.periodos, modelos.var.met)
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
-  
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+  try.res <- try({tree(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
 
   X <- model.matrix( ~ mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR.rot + I(WDR.rot^2) + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))
@@ -1445,13 +1513,22 @@ Xreg.ArimaSIMA.O3Bernabe <- function(modelo, tabla.periodos, modelos.var.met){
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
-  
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+  try.res <- try({tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
 
   X <- model.matrix( ~ mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR.rot + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))
@@ -1608,7 +1685,7 @@ Xreg.ArimaSIMA.PM10Bernabe <- function(modelo, tabla.periodos, modelos.var.met){
   data.frame.pron.met <- pronostico.xreg.met(tabla.periodos)
 
   contaminante <- tabla.periodos[ , modelo$contaminante]
-  O3.96 <- contaminante >= 96
+  PM10.76 <- contaminante >= 76
   WDR <- tabla.periodos$WDR
 #   seno <- sin(WDR*pi/180)
 #   coseno <- cos(WDR*pi/180)
@@ -1624,13 +1701,22 @@ Xreg.ArimaSIMA.PM10Bernabe <- function(modelo, tabla.periodos, modelos.var.met){
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
-  
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+  try.res <- try({tree(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
 
   X <- model.matrix( ~ mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR.rot + I(WDR.rot^2) + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))
@@ -1802,13 +1888,22 @@ Xreg.ArimaSIMA.O3Nicolas <- function(modelo, tabla.periodos, modelos.var.met){
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR.rot,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
-  
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+  try.res <- try({tree(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(O3.96) ~ estacion + mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
 
   X <- model.matrix( ~ mes + periodo + I(log(TOUT+273.15+1)) + HR + I(HR^2) + I(HR^3) + I(1/(WS+1)) + SR + I(SR^2) + WDR.rot + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))
@@ -1965,7 +2060,7 @@ Xreg.ArimaSIMA.PM10Nicolas <- function(modelo, tabla.periodos, modelos.var.met){
   data.frame.pron.met <- pronostico.xreg.met(tabla.periodos)
 
   contaminante <- tabla.periodos[ , modelo$contaminante]
-  O3.96 <- contaminante >= 96
+  PM10.76 <- contaminante >= 76
   WDR <- tabla.periodos$WDR
 #   seno <- sin(WDR*pi/180)
 #   coseno <- cos(WDR*pi/180)
@@ -1981,13 +2076,22 @@ Xreg.ArimaSIMA.PM10Nicolas <- function(modelo, tabla.periodos, modelos.var.met){
     HR = tabla.periodos$HR, SR = tabla.periodos$SR, WS = tabla.periodos$WS, WDR = tabla.periodos$WDR, WDR.rot = WDR.rot)
 
   ##tree clasification
-  tree.fit <- tree(as.factor(O3.96) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
-    data = df, split = "gini")
-  tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
-  tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
-  
-  df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
-  tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))  
+  try.res <- try({tree(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+    data = df, split = "gini")}, silent = TRUE)
+  if(!inherits(try.res, "try-error")){
+    tree.fit <- try.res
+    tree.fit.pred <- predict(tree.fit, newdata = df, type = "class")
+    tree.fit.pred <- factor(tree.fit.pred, levels = c("FALSE", "TRUE"))
+    df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+    tree.pred <- factor(predict(tree.fit, newdata = df.new, type = "class"), levels = c("FALSE", "TRUE"))    
+  }
+    else{
+      glm.fitt <- glm(as.factor(PM10.76) ~ estacion + mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR,
+	family = binomial(link = logit), data = df)
+	tree.fit.pred <- factor(.5 < predict(glm.fitt, newdata = df, type = "response"), levels = c("FALSE", "TRUE"))
+	df.new <- data.frame(data.frame.pron.temp, data.frame.pron.met)
+	tree.pred <- factor(.5 < predict(glm.fitt, newdata = df.new, type = "response"), levels = c("FALSE", "TRUE"))	
+    }
 
   X <- model.matrix( ~ mes + diaSem + periodo + TOUT + HR + I(HR^2) + I(HR^3) + WS + I(WS^2) + SR + I(SR^2) + WDR.rot + I(WDR.rot^2) + tree.pred,
     data = cbind(df, tree.pred = tree.fit.pred))

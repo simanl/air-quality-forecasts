@@ -32,20 +32,21 @@ validacion.datos.SIMA <- function(x, ...){
   
   ## valores por abajo de 0, se pone 0 salvo que en el script mencione
   ## otra cosa 
-  if(any(x$CO < 0, na.rm = T)) x$CO[x$CO < 0] <- 0
-  if(any(x$NO < 0, na.rm = T)) x$NO[x$NO < 0] <- 0
-  if(any(x$NO2 < 0, na.rm = T)) x$NO2[x$NO2 < 0] <- 0
-  if(any(x$NOX < 0, na.rm = T)) x$NOX[x$NOX < 0] <- 0
-  if(any(x$O3 < 0, na.rm = T)) x$O3[x$O3 < 0] <- 0
-  if(any(x$PM10 < 0, na.rm = T)) x$PM10[x$PM10 < 0] <- 0
+  if(any(x$CO < 0, na.rm = T)) x$CO[x$CO < 0] <- NA
+  if(any(x$NO < 0, na.rm = T)) x$NO[x$NO < 0] <- NA
+  if(any(x$NO2 < 0, na.rm = T)) x$NO2[x$NO2 < 0] <- NA
+  if(any(x$NOX < 0, na.rm = T)) x$NOX[x$NOX < 0] <- NA
+  if(any(x$NOX < 1, na.rm = T)) x$NOX[x$NOX < 1] <- NA  
+  if(any(x$O3 < 0, na.rm = T)) x$O3[x$O3 < 0] <- NA
+  if(any(x$PM10 < 0, na.rm = T)) x$PM10[x$PM10 < 0] <- NA
   if(any(x$PM2.5 < 0, na.rm = T)) x$PM2.5[x$PM2.5 < 0] <- NA
   #if(any(x$PRS < 0, na.rm = T)) x$PRS[x$PRS < 0] <- 0
-  if(any(x$RAINF < 0, na.rm = T)) x$RAINF[x$RAINF < 0] <- 0
-  if(any(x$HR < 0, na.rm = T)) x$HR[x$HR < 0] <- 0
-  if(any(x$SO2 < 0, na.rm = T)) x$SO2[x$SO2 < 0] <- 0
-  if(any(x$SR < 0, na.rm = T)) x$SR[x$SR < 0] <- 0
-  if(any(x$WS < 0, na.rm = T)) x$WS[x$WS < 0] <- 0
-  if(any(x$WDR < 0, na.rm = T)) x$WDR[x$WDR < 0] <- 0
+  if(any(x$RAINF < 0, na.rm = T)) x$RAINF[x$RAINF < 0] <- NA
+  if(any(x$HR < 0, na.rm = T)) x$HR[x$HR < 0] <- NA
+  if(any(x$SO2 < 0, na.rm = T)) x$SO2[x$SO2 < 0] <- NA
+  if(any(x$SR < 0, na.rm = T)) x$SR[x$SR < 0] <- NA
+  if(any(x$WS < 0, na.rm = T)) x$WS[x$WS < 0] <- NA
+  if(any(x$WDR < 0, na.rm = T)) x$WDR[x$WDR < 0] <- NA
   
   ##valores por encima de cierto valor (donde aplique)
   if(any(x$HR > 100, na.rm = T)) x$HR[x$HR > 100] <- 100
@@ -54,8 +55,7 @@ validacion.datos.SIMA <- function(x, ...){
   if(any(x$RAINF > 10, na.rm = T)) x$RAINF[x$RAINF > 10] <- NA
   
   ## PRS abajo de 900 poner NA (revisar porque en ocasiones manejaban otras unidades)
-  if(any(x$PRS < 900, na.rm = T)) x[x$PRS < 900] <- NA
-  
+  if(any(x$PRS < 900, na.rm = T)) x$PRS[x$PRS < 900] <- NA
   ## información en decimales (dejar?)
   if(any(x$O3 != floor(x$O3), na.rm = T)){
     cuales <- which(x$O3 != floor(x$O3))

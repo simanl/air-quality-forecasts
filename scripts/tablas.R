@@ -116,7 +116,7 @@ nas.ok <- function(x, ...)
 
 nas.ok.default <- function(x, n, ...){
   if(length(x)!=72) stop("Numero de horas debe ser 72.")
-  x <- as.logical(x)
+  x <- is.na(x)
   rachas <- rle(x)
   nas <- as.logical(rachas$values)
   long <- rachas$lengths
