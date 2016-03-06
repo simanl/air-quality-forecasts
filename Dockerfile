@@ -3,6 +3,7 @@ MAINTAINER Roberto Quintanilla <vov@icalialabs.com>
 
 ADD . /app
 WORKDIR /app
+ENV SPCA_HOME=/app
 
 # Run the Packrat script:
 RUN Rscript start.R -- --version --bootstrap-packrat

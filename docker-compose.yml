@@ -14,6 +14,8 @@ services:
     command: Rscript start.R -- --bootstrap-packrat
     expose:
       - 6311
+    environment:
+      SPCA_HOME: /app
 
   client:
     image: ruby:2.2.3
