@@ -81,13 +81,12 @@ class EngineClient
   end
 
   def spca(input_data)
-
     # Las fechas se interpretan por rserve-simpler como
     # número de días a partir del 1970-01-01:
     # Date.parse('1970-01-01').advance(days: 16222)
 
     forecast_data = conn.converse("tabla.entrada" => input_data.to_dataframe) do
-      'SPCA("/app")'
+      'SPCA()'
     end
 
     # SPCA method completed successfully on engine... tell it to save the data:
