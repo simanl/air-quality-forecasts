@@ -1,14 +1,17 @@
 SPCA <- function(x, ...)
   UseMethod("SPCA")
 
-SPCA.default <- function(entrada, salida, SPCA_HOME, estimacion = FALSE){
+SPCA.default <- function(entrada, salida, estimacion = FALSE){
 
-##SCPA_HOME
-  if(!missing(SPCA_HOME))
-    setwd(SPCA_HOME)
-    else
-      SPCA_HOME <- getwd()
-      
+  # Set SCPA_HOME from the environment variable:
+  SPCA_HOME <- Sys.getenv("SPCA_HOME")
+
+  # Or from the current working directory if it isn't set:
+  if(SPCA_HOME == "") SPCA_HOME <- getwd()
+
+  # Set the working directory to whatever value SPCA_HOME finally has:
+  setwd(SPCA_HOME)
+   
 ##datos historicos horarios
   load("tablas/series/tabla_maestra.RData", .GlobalEnv) #tabla maestra final (horaria) con solo los sitios de interes
 
