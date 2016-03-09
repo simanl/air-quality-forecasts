@@ -69,9 +69,7 @@ tablaSalida.stSIMA <- function(x, pronostico, norma, ...){
   
   categorias <- cut(pronostico, breaks = norma, labels = c("buena", "regular", "mala", "muy mala", "extremadamente mala"),
                       include.lowest = TRUE)
-  resultado <- data.frame(sitio = sitio, fecha = fechas, periodo = periodos, pronostico = categorias)
-#   attr(resultado, "periodo") <- paste(as.character(contaminante), as.character(sitio), fechas[1], periodos[1], sep = "_")
-#   attr(resultado, "valores") <- data.frame(sitio = sitio, fecha = fechas, periodo = periodos, pronostico = pronostico)
+  resultado <- data.frame(sitio = sitio, fecha = fechas, periodo = periodos, pronostico = as.numeric(round(pronostico)), categoria = categorias)  
   return(resultado)
 }
 
