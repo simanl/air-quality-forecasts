@@ -23,9 +23,9 @@ SPCA.default <- function(entrada, salida, estimacion = FALSE){
   tabla.maestra.ult.renglon <- tabla.maestra[nrow(tabla.maestra), ]
   
   if(missing(entrada))
-    tabla.entrada <- READ(as.data.frame(get("tabla.entrada", envir = .GlobalEnv)), tabla.maestra.ult.renglon )
+    tabla.entrada <- READ(as.data.frame(get("tabla.entrada", envir = .GlobalEnv)), tabla.maestra.ult.renglon, check = T)
     else
-      tabla.entrada <- READ(substitute(entrada), tabla.maestra.ult.renglon)
+      tabla.entrada <- READ(substitute(entrada), tabla.maestra.ult.renglon, check = T)
 ##carga de objetos stSIMA
   load("tablas/series/O3Obispado.RData", .GlobalEnv)
   load("tablas/series/O3Pastora.RData", .GlobalEnv)
@@ -161,6 +161,7 @@ cat("PM10 Catarina\n")
   tabla.salida.PM2.5 <- tabla.salida.O3
   tabla.salida.PM2.5$contaminante <- "PM2.5"
   tabla.salida.PM2.5$pronostico <- NA
+  tabla.salida.PM2.5$categoria <- NA
   
   tabla.salida <- rbind(tabla.salida.O3, tabla.salida.PM10, tabla.salida.PM2.5)
   

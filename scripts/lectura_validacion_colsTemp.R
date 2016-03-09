@@ -1,19 +1,19 @@
 READ <- function(x, ...)
   UseMethod("READ")
 
-READ.default <- function(file, tm.ur, header = TRUE, sep = ",", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...){
+READ.default <- function(file, tm.ur, check = TRUE,  header = TRUE, sep = ",", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...){
   mc <- as.list(match.call(expand.dots = T))
   mc$file <- file
   tabla <- do.call("read.csv", mc[-c(1L, 3L)])
-  init.check(tabla, tm.ur)
+  if(check) init.check(tabla, tm.ur)
   attr(tabla, "validacion") <- FALSE
   attr(tabla, "completa") <- FALSE
   class(tabla) <- c("datos.SIMA", "data.frame")
   return(tabla)
 }
 
-READ.data.frame <- function(x, tm.ur, ...){
-  init.check(x, tm.ur)
+READ.data.frame <- function(x, tm.ur, check = TRUE, ...){
+  if(check) init.check(x, tm.ur)
   attr(x, "validacion") <- FALSE
   attr(x, "completa") <- FALSE
   class(x) <- c("datos.SIMA", "data.frame")
