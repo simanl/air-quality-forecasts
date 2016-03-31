@@ -18,7 +18,7 @@ services:
       SPCA_HOME: /app
 
   client:
-    image: ruby:2.2.3
+    image: ruby:2.3.0
     command: bundle console
     entrypoint: /usr/src/app/entrypoint.sh
     volumes:
