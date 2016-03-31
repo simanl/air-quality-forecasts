@@ -71,7 +71,7 @@ class EngineClient
       results = spca(cycle_data)
       exit_message = "finished!"
       File.write(last_cycle_run_path, cycle_to_run.to_s, mode: 'w')
-      cycle_data
+      results
     rescue => e
       exit_message = "FAILED! \n#{e.class.name} - #{e.message}"
     ensure
