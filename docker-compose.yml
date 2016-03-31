@@ -16,6 +16,7 @@ services:
       - 6311
     environment:
       SPCA_HOME: /app
+      PATH: /app/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
   client:
     image: ruby:2.3.0
