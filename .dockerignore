@@ -1,13 +1,28 @@
+# Ignore version control files:
 .git/
 .gitignore
 
-ejemplos/
+# Ignore examples:
+ejemplos
+
+# Ignore installed dependencies (will install during build...)
 packrat/lib*
 packrat/src
+
+# Ignore docker and environment files:
 .dockerignore
 Dockerfile
 docker-compose.yml
 
+# Ignore OS artifacts:
+**/.DS_Store
+
+# Ignore temporary files:
+tmp/*
+!tmp/.keep
+!tmp/sample-data/.keep
+
+# Ignore statistics data files:
 tablas/pronosticos/*
 !tablas/pronosticos/.keep
 tablas/series/*
