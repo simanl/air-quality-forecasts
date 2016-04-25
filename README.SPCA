@@ -1,0 +1,17 @@
+SPCA: Sistema de Pronósticos de Calidad de Aire.
+Versión: 1.0.0
+R version 3.2.1 (2015-06-18) -- "World-Famous Astronaut"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+Dependencias: arfima, data.table, forecast, packrat, tree.
+
+Sistema para la generación de pronósticos univariados de Ozono y PM10 para los sitios Obispado, La Pastora, San Nicolás, San Bernabe y Santa Catarina
+de la Zona Metropolitana de Monterrey.
+
+Autor: Sigfrido Iglesias González, sigfrido@alumni.utoronto.ca, sigfrido@itesm.mx
+Agradecimientos: Roberto Cortés
+
+CHANGELOG: Ver changelog.SPCA
+
+Instalación: Copiar el directorio en <<repo>> en el directorio raíz del proyecto.
+

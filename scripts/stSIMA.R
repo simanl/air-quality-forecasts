@@ -58,9 +58,10 @@ stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado
 
 update.stSIMA <- function(x, tabla.horaria.nueva, modelos.pronostico){
   require(data.table)
-  tabla.horaria.nueva.sitio <- tabla.horaria.nueva[tabla.horaria.nueva$sitio == x$sitio, ]
+# tabla.horaria.nueva.sitio <- tabla.horaria.nueva[tabla.horaria.nueva$sitio == x$sitio, ]
   if(!missing(tabla.horaria.nueva)){
 #     tabla.horaria.sitio.vieja <- x$tabla.horaria.sitio
+	tabla.horaria.nueva.sitio <- tabla.horaria.nueva[tabla.horaria.nueva$sitio == x$sitio, ]
     x$tabla.horaria.sitio <- as.data.frame(rbindlist(list(x$tabla.horaria.sitio, tabla.horaria.nueva.sitio)))
     renglon.nuevo <- renglon.periodo(tabla.horaria.nueva.sitio, contaminante = x$contaminante, pesos = x$pesos)
 #     tabla.periodos.sitio.vieja <- x$tabla.periodos.sitio

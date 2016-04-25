@@ -112,7 +112,7 @@ tablaPronostico.stSIMA <- function(x, pronostico, norma, ...){
 nas.ok <- function(x, ...)
   UseMethod("nas.ok")
 
-nas.ok.default <- function(x, n, ...){
+nas.ok.default <- function(x, ...){
   if(length(x)!=72) stop("Numero de horas debe ser 72.")
   x <- is.na(x)
   rachas <- rle(x)
@@ -121,9 +121,9 @@ nas.ok.default <- function(x, n, ...){
   if(all(!nas)) return(TRUE)
   if(any(long[nas])>=24){
 #       aux1 <- x[1:24]
-      aux2 <- x[25:48]
-      aux3 <- x[49:72]
-      if(sum(aux2) == 0 && sum(aux3) == 0) return(TRUE)
+      aux1 <- x[25:48]
+      aux2 <- x[49:72]
+      if(sum(aux1) == 0 && sum(aux2) == 0) return(TRUE)
 	else return(FALSE)
   }
     else return(TRUE)

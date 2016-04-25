@@ -1,7 +1,8 @@
 imputacion <- function(x, ...)
   UseMethod("imputacion")
 
-imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos.dir = "modelos/modelos de imputacion"){
+#imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos.dir = "modelos/modelos de imputacion"){
+imputacion.datos.SIMA <- function(x, tabla.historica, modelos.dir = "modelos/modelos_de_imputacion"){
   ##1. ozono
   #inlcusion de modelos
   ruta <- paste(modelos.dir, "/modelos_imputacion_O3.RData", sep = "")
@@ -18,7 +19,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   O3.obispado.nuevo <- obispado$O3
   if(any(is.na(obispado$O3))){
     O3.obispado.historico <- tabla.historica$O3[tabla.historica$sitio == "Obispado"]
-    imputacion.O3.obispado <- imputacion(modelos.imputacion$arima.O3.obispado.imp, O3.obispado.nuevo, O3.obispado.historico)
+    imputacion.O3.obispado <- imputacion(modelos.imputacion$O3.obispado.imp, O3.obispado.nuevo, O3.obispado.historico)
     imputacion.O3.obispado[imputacion.O3.obispado  < 0] <- 0
     x$O3[x$sitio == "Obispado"] <- imputacion.O3.obispado
   }
@@ -27,7 +28,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   O3.catarina.nuevo <- catarina$O3
   if(any(is.na(catarina$O3))){ 
     O3.catarina.historico <- tabla.historica$O3[tabla.historica$sitio == "Santa Catarina"]
-    imputacion.O3.catarina <- imputacion(modelos.imputacion$arima.O3.catarina.imp, O3.catarina.nuevo, O3.catarina.historico)
+    imputacion.O3.catarina <- imputacion(modelos.imputacion$O3.catarina.imp, O3.catarina.nuevo, O3.catarina.historico)
     imputacion.O3.catarina[imputacion.O3.catarina  < 0] <- 0
     x$O3[x$sitio == "Santa Catarina"] <- imputacion.O3.catarina
   }
@@ -36,7 +37,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   O3.bernabe.nuevo <- bernabe$O3
   if(any(is.na(bernabe$O3))){
     O3.bernabe.historico <- tabla.historica$O3[tabla.historica$sitio == "San Bernabe"]
-    imputacion.O3.bernabe <- imputacion(modelos.imputacion$arima.O3.bernabe.imp, O3.bernabe.nuevo, O3.bernabe.historico)
+    imputacion.O3.bernabe <- imputacion(modelos.imputacion$O3.bernabe.imp, O3.bernabe.nuevo, O3.bernabe.historico)
     imputacion.O3.bernabe[imputacion.O3.bernabe  < 0] <- 0
     x$O3[x$sitio == "San Bernabe"] <- imputacion.O3.bernabe
   }
@@ -45,7 +46,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   O3.nicolas.nuevo <- nicolas$O3
   if(any(is.na(nicolas$O3))){
     O3.nicolas.historico <- tabla.historica$O3[tabla.historica$sitio == "San Nicolas"]
-    imputacion.O3.nicolas <- imputacion(modelos.imputacion$arima.O3.nicolas.imp, O3.nicolas.nuevo, O3.nicolas.historico)
+    imputacion.O3.nicolas <- imputacion(modelos.imputacion$O3.nicolas.imp, O3.nicolas.nuevo, O3.nicolas.historico)
     imputacion.O3.nicolas[imputacion.O3.nicolas  < 0] <- 0
     x$O3[x$sitio == "San Nicolas"] <- imputacion.O3.nicolas
   }
@@ -54,7 +55,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   O3.pastora.nuevo <- pastora$O3
   if(any(is.na(pastora$O3))){
     O3.pastora.historico <- tabla.historica$O3[tabla.historica$sitio == "La Pastora"]
-    imputacion.O3.pastora <- imputacion(modelos.imputacion$arima.O3.pastora.imp, O3.pastora.nuevo, O3.pastora.historico)
+    imputacion.O3.pastora <- imputacion(modelos.imputacion$O3.pastora.imp, O3.pastora.nuevo, O3.pastora.historico)
     imputacion.O3.pastora[imputacion.O3.pastora  < 0] <- 0
     x$O3[x$sitio == "La Pastora"] <- imputacion.O3.pastora
   }
@@ -71,7 +72,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   PM10.obispado.nuevo <- obispado$PM10
   if(any(is.na(obispado$PM10))){
     PM10.obispado.historico <- tabla.historica$PM10[tabla.historica$sitio == "Obispado"]
-    imputacion.PM10.obispado <- imputacion(modelos.imputacion$arima.PM10.obispado.imp, PM10.obispado.nuevo, PM10.obispado.historico)
+    imputacion.PM10.obispado <- imputacion(modelos.imputacion$PM10.obispado.imp, PM10.obispado.nuevo, PM10.obispado.historico)
     imputacion.PM10.obispado[imputacion.PM10.obispado  < 0] <- 0
     x$PM10[x$sitio == "Obispado"] <- imputacion.PM10.obispado
   }
@@ -81,7 +82,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   PM10.catarina.nuevo <- catarina$PM10
   if(any(is.na(catarina$PM10))){
     PM10.catarina.historico <- tabla.historica$PM10[tabla.historica$sitio == "Santa Catarina"]
-    imputacion.PM10.catarina <- imputacion(modelos.imputacion$arima.PM10.catarina.imp, PM10.catarina.nuevo, PM10.catarina.historico)
+    imputacion.PM10.catarina <- imputacion(modelos.imputacion$PM10.catarina.imp, PM10.catarina.nuevo, PM10.catarina.historico)
     imputacion.PM10.catarina[imputacion.PM10.catarina  < 0] <- 0
     x$PM10[x$sitio == "Santa Catarina"] <- imputacion.PM10.catarina
   }
@@ -91,7 +92,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   PM10.bernabe.nuevo <- bernabe$PM10
   if(any(is.na(bernabe$PM10))){
     PM10.bernabe.historico <- tabla.historica$PM10[tabla.historica$sitio == "San Bernabe"]
-    imputacion.PM10.bernabe <- imputacion(modelos.imputacion$arima.PM10.bernabe.imp, PM10.bernabe.nuevo, PM10.bernabe.historico)
+    imputacion.PM10.bernabe <- imputacion(modelos.imputacion$PM10.bernabe.imp, PM10.bernabe.nuevo, PM10.bernabe.historico)
     imputacion.PM10.bernabe[imputacion.PM10.bernabe  < 0] <- 0
     x$PM10[x$sitio == "San Bernabe"] <- imputacion.PM10.bernabe
   }
@@ -101,7 +102,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   PM10.nicolas.nuevo <- nicolas$PM10
   if(any(is.na(nicolas$PM10))){
     PM10.nicolas.historico <- tabla.historica$PM10[tabla.historica$sitio == "San Nicolas"]
-    imputacion.PM10.nicolas <- imputacion(modelos.imputacion$arima.PM10.nicolas.imp, PM10.nicolas.nuevo, PM10.nicolas.historico)
+    imputacion.PM10.nicolas <- imputacion(modelos.imputacion$PM10.nicolas.imp, PM10.nicolas.nuevo, PM10.nicolas.historico)
     imputacion.PM10.nicolas[imputacion.PM10.nicolas  < 0] <- 0
     x$PM10[x$sitio == "San Nicolas"] <- imputacion.PM10.nicolas
   }
@@ -111,7 +112,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   PM10.pastora.nuevo <- pastora$PM10
   if(any(is.na(pastora$PM10))){
     PM10.pastora.historico <- tabla.historica$PM10[tabla.historica$sitio == "La Pastora"]
-    imputacion.PM10.pastora <- imputacion(modelos.imputacion$arima.PM10.pastora.imp, PM10.pastora.nuevo, PM10.pastora.historico)
+    imputacion.PM10.pastora <- imputacion(modelos.imputacion$PM10.pastora.imp, PM10.pastora.nuevo, PM10.pastora.historico)
     imputacion.PM10.pastora[imputacion.PM10.pastora  < 0] <- 0
     x$PM10[x$sitio == "La Pastora"] <- imputacion.PM10.pastora
   }
@@ -128,7 +129,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   NOX.obispado.nuevo <- obispado$NOX
   if(any(is.na(obispado$NOX))){
     NOX.obispado.historico <- tabla.historica$NOX[tabla.historica$sitio == "Obispado"]
-    imputacion.NOX.obispado <- imputacion(modelos.imputacion$arima.NOX.obispado.imp, NOX.obispado.nuevo, NOX.obispado.historico)
+    imputacion.NOX.obispado <- imputacion(modelos.imputacion$NOX.obispado.imp, NOX.obispado.nuevo, NOX.obispado.historico)
     imputacion.NOX.obispado[imputacion.NOX.obispado  < 0] <- 0
     x$NOX[x$sitio == "Obispado"] <- imputacion.NOX.obispado
   }
@@ -137,7 +138,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   NOX.pastora.nuevo <- pastora$NOX
   if(any(is.na(pastora$NOX))){
     NOX.pastora.historico <- tabla.historica$NOX[tabla.historica$sitio == "La Pastora"]
-    imputacion.NOX.pastora <- imputacion(modelos.imputacion$arima.NOX.pastora.imp, NOX.pastora.nuevo, NOX.pastora.historico)
+    imputacion.NOX.pastora <- imputacion(modelos.imputacion$NOX.pastora.imp, NOX.pastora.nuevo, NOX.pastora.historico)
     imputacion.NOX.pastora[imputacion.NOX.pastora  < 0] <- 0
     x$NOX[x$sitio == "La Pastora"] <- imputacion.NOX.pastora
   }
@@ -147,7 +148,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   NOX.bernabe.nuevo <- bernabe$NOX
   if(any(is.na(bernabe$NOX))){
     NOX.bernabe.historico <- tabla.historica$NOX[tabla.historica$sitio == "San Bernabe"]
-    imputacion.NOX.bernabe <- imputacion(modelos.imputacion$arima.NOX.bernabe.imp, NOX.bernabe.nuevo, NOX.bernabe.historico)
+    imputacion.NOX.bernabe <- imputacion(modelos.imputacion$NOX.bernabe.imp, NOX.bernabe.nuevo, NOX.bernabe.historico)
     imputacion.NOX.bernabe[imputacion.NOX.bernabe  < 0] <- 0
     x$NOX[x$sitio == "San Bernabe"] <- imputacion.NOX.bernabe
   }
@@ -157,7 +158,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   NOX.nicolas.nuevo <- nicolas$NOX
   if(any(is.na(nicolas$NOX))){
     NOX.nicolas.historico <- tabla.historica$NOX[tabla.historica$sitio == "San Nicolas"]
-    imputacion.NOX.nicolas <- imputacion(modelos.imputacion$arima.NOX.nicolas.imp, NOX.nicolas.nuevo, NOX.nicolas.historico)
+    imputacion.NOX.nicolas <- imputacion(modelos.imputacion$NOX.nicolas.imp, NOX.nicolas.nuevo, NOX.nicolas.historico)
     imputacion.NOX.nicolas[imputacion.NOX.nicolas  < 0] <- 0
     x$NOX[x$sitio == "San Nicolas"] <- imputacion.NOX.nicolas
   }
@@ -166,7 +167,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   NOX.catarina.nuevo <- catarina$NOX
   if(any(is.na(catarina$NOX))){
     NOX.catarina.historico <- tabla.historica$NOX[tabla.historica$sitio == "Santa Catarina"]
-    imputacion.NOX.catarina <- imputacion(modelos.imputacion$arima.NOX.catarina.imp, NOX.catarina.nuevo, NOX.catarina.historico)
+    imputacion.NOX.catarina <- imputacion(modelos.imputacion$NOX.catarina.imp, NOX.catarina.nuevo, NOX.catarina.historico)
     imputacion.NOX.catarina[imputacion.NOX.catarina  < 0] <- 0
     x$NOX[x$sitio == "Santa Catarina"] <- imputacion.NOX.catarina
   }
@@ -189,7 +190,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   HR.obispado.nuevo <- obispado$HR
   if(any(is.na(obispado$HR))){
     HR.obispado.historico <- tabla.historica$HR[tabla.historica$sitio == "Obispado"]
-    imputacion.HR.obispado <- imputacion(modelos.imputacion$obispado.arima.hr.imp, HR.obispado.nuevo, HR.obispado.historico)
+    imputacion.HR.obispado <- imputacion(modelos.imputacion$obispado.hr.imp, HR.obispado.nuevo, HR.obispado.historico)
     imputacion.HR.obispado[imputacion.HR.obispado  < 0] <- 0
     imputacion.HR.obispado[imputacion.HR.obispado  > 100] <- 100
     x$HR[x$sitio == "Obispado"] <- imputacion.HR.obispado
@@ -200,7 +201,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   SR.obispado.nuevo <- obispado$SR
   if(any(is.na(obispado$SR))){
     SR.obispado.historico <- tabla.historica$SR[tabla.historica$sitio == "Obispado"]
-    imputacion.SR.obispado <- imputacion(modelos.imputacion$obispado.arima.sr.imp, SR.obispado.nuevo, SR.obispado.historico)
+    imputacion.SR.obispado <- imputacion(modelos.imputacion$obispado.sr.imp, SR.obispado.nuevo, SR.obispado.historico)
     imputacion.SR.obispado[imputacion.SR.obispado  < 0] <- 0
     x$SR[x$sitio == "Obispado"] <- imputacion.SR.obispado
   }
@@ -210,7 +211,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WS.obispado.nuevo <- obispado$WS
   if(any(is.na(obispado$WS))){
     WS.obispado.historico <- tabla.historica$WS[tabla.historica$sitio == "Obispado"]
-    imputacion.WS.obispado <- imputacion(modelos.imputacion$obispado.arima.ws.imp, WS.obispado.nuevo, WS.obispado.historico)
+    imputacion.WS.obispado <- imputacion(modelos.imputacion$obispado.ws.imp, WS.obispado.nuevo, WS.obispado.historico)
     imputacion.WS.obispado[imputacion.WS.obispado  < 0] <- 0
     x$WS[x$sitio == "Obispado"] <- imputacion.WS.obispado
   }
@@ -220,7 +221,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   TOUT.obispado.nuevo <- obispado$TOUT
   if(any(is.na(obispado$TOUT))){
     TOUT.obispado.historico <- tabla.historica$TOUT[tabla.historica$sitio == "Obispado"]
-    imputacion.TOUT.obispado <- imputacion(modelos.imputacion$obispado.arima.tout.imp, TOUT.obispado.nuevo, TOUT.obispado.historico)
+    imputacion.TOUT.obispado <- imputacion(modelos.imputacion$obispado.tout.imp, TOUT.obispado.nuevo, TOUT.obispado.historico)
     x$TOUT[x$sitio == "Obispado"] <- imputacion.TOUT.obispado
   }
   
@@ -229,8 +230,8 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WDR.obispado.nuevo <- obispado$WDR
   if(any(is.na(obispado$WDR))){
     WDR.obispado.historico <- tabla.historica$WDR[tabla.historica$sitio == "Obispado"]
-    imputacion.SIN.WDR.obispado <- imputacion(modelos.imputacion$obispado.arima.sin.wdr.imp, WDR.obispado.nuevo, WDR.obispado.historico)
-    imputacion.COS.WDR.obispado <- imputacion(modelos.imputacion$obispado.arima.cos.wdr.imp, WDR.obispado.nuevo, WDR.obispado.historico)
+    imputacion.SIN.WDR.obispado <- imputacion(modelos.imputacion$obispado.sin.wdr.imp, WDR.obispado.nuevo, WDR.obispado.historico)
+    imputacion.COS.WDR.obispado <- imputacion(modelos.imputacion$obispado.cos.wdr.imp, WDR.obispado.nuevo, WDR.obispado.historico)
     
     ##revisar limites imputacion
     imputacion.WDR.obispado <- atan2(x = imputacion.COS.WDR.obispado, y = imputacion.SIN.WDR.obispado) * 180/pi
@@ -253,7 +254,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   HR.catarina.nuevo <- catarina$HR
   if(any(is.na(catarina$HR))){
     HR.catarina.historico <- tabla.historica$HR[tabla.historica$sitio == "Santa Catarina"]
-    imputacion.HR.catarina <- imputacion(modelos.imputacion$catarina.arima.hr.imp, HR.catarina.nuevo, HR.catarina.historico)
+    imputacion.HR.catarina <- imputacion(modelos.imputacion$catarina.hr.imp, HR.catarina.nuevo, HR.catarina.historico)
     imputacion.HR.catarina[imputacion.HR.catarina  < 0] <- 0
     imputacion.HR.catarina[imputacion.HR.catarina  > 100] <- 100
     x$HR[x$sitio == "Santa Catarina"] <- imputacion.HR.catarina
@@ -264,7 +265,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   SR.catarina.nuevo <- catarina$SR
   if(any(is.na(catarina$SR))){
     SR.catarina.historico <- tabla.historica$SR[tabla.historica$sitio == "Santa Catarina"]
-    imputacion.SR.catarina <- imputacion(modelos.imputacion$catarina.arima.sr.imp, SR.catarina.nuevo, SR.catarina.historico)
+    imputacion.SR.catarina <- imputacion(modelos.imputacion$catarina.sr.imp, SR.catarina.nuevo, SR.catarina.historico)
     imputacion.SR.catarina[imputacion.SR.catarina  < 0] <- 0
     x$SR[x$sitio == "Santa Catarina"] <- imputacion.SR.catarina
   }
@@ -274,7 +275,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WS.catarina.nuevo <- catarina$WS
   if(any(is.na(catarina$WS))){
     WS.catarina.historico <- tabla.historica$WS[tabla.historica$sitio == "Santa Catarina"]
-    imputacion.WS.catarina <- imputacion(modelos.imputacion$catarina.arima.ws.imp, WS.catarina.nuevo, WS.catarina.historico)
+    imputacion.WS.catarina <- imputacion(modelos.imputacion$catarina.ws.imp, WS.catarina.nuevo, WS.catarina.historico)
     imputacion.WS.catarina[imputacion.WS.catarina  < 0] <- 0
     x$WS[x$sitio == "Santa Catarina"] <- imputacion.WS.catarina
   }
@@ -284,7 +285,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   TOUT.catarina.nuevo <- catarina$TOUT
   if(any(is.na(catarina$TOUT))){
     TOUT.catarina.historico <- tabla.historica$TOUT[tabla.historica$sitio == "Santa Catarina"]
-    imputacion.TOUT.catarina <- imputacion(modelos.imputacion$catarina.arima.tout.imp, TOUT.catarina.nuevo, TOUT.catarina.historico)
+    imputacion.TOUT.catarina <- imputacion(modelos.imputacion$catarina.tout.imp, TOUT.catarina.nuevo, TOUT.catarina.historico)
     x$TOUT[x$sitio == "Santa Catarina"] <- imputacion.TOUT.catarina
   }
   
@@ -293,8 +294,8 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WDR.catarina.nuevo <- catarina$WDR
   if(any(is.na(catarina$WDR))){
     WDR.catarina.historico <- tabla.historica$WDR[tabla.historica$sitio == "Santa Catarina"]
-    imputacion.SIN.WDR.catarina <- imputacion(modelos.imputacion$catarina.arima.sin.wdr.imp, WDR.catarina.nuevo, WDR.catarina.historico)
-    imputacion.COS.WDR.catarina <- imputacion(modelos.imputacion$catarina.arima.cos.wdr.imp, WDR.catarina.nuevo, WDR.catarina.historico)
+    imputacion.SIN.WDR.catarina <- imputacion(modelos.imputacion$catarina.sin.wdr.imp, WDR.catarina.nuevo, WDR.catarina.historico)
+    imputacion.COS.WDR.catarina <- imputacion(modelos.imputacion$catarina.cos.wdr.imp, WDR.catarina.nuevo, WDR.catarina.historico)
     
     ##revisar limites imputacion
     imputacion.WDR.catarina <- atan2(x = imputacion.COS.WDR.catarina, y = imputacion.SIN.WDR.catarina) * 180/pi
@@ -317,7 +318,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   HR.bernabe.nuevo <- bernabe$HR
   if(any(is.na(bernabe$HR))){
     HR.bernabe.historico <- tabla.historica$HR[tabla.historica$sitio == "San Bernabe"]
-    imputacion.HR.bernabe <- imputacion(modelos.imputacion$bernabe.arima.hr.imp, HR.bernabe.nuevo, HR.bernabe.historico)
+    imputacion.HR.bernabe <- imputacion(modelos.imputacion$bernabe.hr.imp, HR.bernabe.nuevo, HR.bernabe.historico)
     imputacion.HR.bernabe[imputacion.HR.bernabe  < 0] <- 0
     imputacion.HR.bernabe[imputacion.HR.bernabe  > 100] <- 100
     x$HR[x$sitio == "San Bernabe"] <- imputacion.HR.bernabe
@@ -328,7 +329,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   SR.bernabe.nuevo <- bernabe$SR
   if(any(is.na(bernabe$SR))){
     SR.bernabe.historico <- tabla.historica$SR[tabla.historica$sitio == "San Bernabe"]
-    imputacion.SR.bernabe <- imputacion(modelos.imputacion$bernabe.arima.sr.imp, SR.bernabe.nuevo, SR.bernabe.historico)
+    imputacion.SR.bernabe <- imputacion(modelos.imputacion$bernabe.sr.imp, SR.bernabe.nuevo, SR.bernabe.historico)
     imputacion.SR.bernabe[imputacion.SR.bernabe  < 0] <- 0
     x$SR[x$sitio == "San Bernabe"] <- imputacion.SR.bernabe
   }
@@ -338,7 +339,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WS.bernabe.nuevo <- bernabe$WS
   if(any(is.na(bernabe$WS))){
     WS.bernabe.historico <- tabla.historica$WS[tabla.historica$sitio == "San Bernabe"]
-    imputacion.WS.bernabe <- imputacion(modelos.imputacion$bernabe.arima.ws.imp, WS.bernabe.nuevo, WS.bernabe.historico)
+    imputacion.WS.bernabe <- imputacion(modelos.imputacion$bernabe.ws.imp, WS.bernabe.nuevo, WS.bernabe.historico)
     imputacion.WS.bernabe[imputacion.WS.bernabe  < 0] <- 0
     x$WS[x$sitio == "San Bernabe"] <- imputacion.WS.bernabe
   }
@@ -348,7 +349,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   TOUT.bernabe.nuevo <- bernabe$TOUT
   if(any(is.na(bernabe$TOUT))){
     TOUT.bernabe.historico <- tabla.historica$TOUT[tabla.historica$sitio == "San Bernabe"]
-    imputacion.TOUT.bernabe <- imputacion(modelos.imputacion$bernabe.arima.tout.imp, TOUT.bernabe.nuevo, TOUT.bernabe.historico)
+    imputacion.TOUT.bernabe <- imputacion(modelos.imputacion$bernabe.tout.imp, TOUT.bernabe.nuevo, TOUT.bernabe.historico)
     x$TOUT[x$sitio == "San Bernabe"] <- imputacion.TOUT.bernabe
   }
   
@@ -357,8 +358,8 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WDR.bernabe.nuevo <- bernabe$WDR
   if(any(is.na(bernabe$WDR))){
     WDR.bernabe.historico <- tabla.historica$WDR[tabla.historica$sitio == "San Bernabe"]
-    imputacion.SIN.WDR.bernabe <- imputacion(modelos.imputacion$bernabe.arima.sin.wdr.imp, WDR.bernabe.nuevo, WDR.bernabe.historico)
-    imputacion.COS.WDR.bernabe <- imputacion(modelos.imputacion$bernabe.arima.cos.wdr.imp, WDR.bernabe.nuevo, WDR.bernabe.historico)
+    imputacion.SIN.WDR.bernabe <- imputacion(modelos.imputacion$bernabe.sin.wdr.imp, WDR.bernabe.nuevo, WDR.bernabe.historico)
+    imputacion.COS.WDR.bernabe <- imputacion(modelos.imputacion$bernabe.cos.wdr.imp, WDR.bernabe.nuevo, WDR.bernabe.historico)
     imputacion.WDR.bernabe <- atan2(x = imputacion.COS.WDR.bernabe, y = imputacion.SIN.WDR.bernabe) * 180/pi
     aux <- imputacion.WDR.bernabe < 0
     imputacion.WDR.bernabe[aux] <- imputacion.WDR.bernabe[aux] + 360
@@ -379,7 +380,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   HR.nicolas.nuevo <- nicolas$HR
   if(any(is.na(nicolas$HR))){
     HR.nicolas.historico <- tabla.historica$HR[tabla.historica$sitio == "San Nicolas"]
-    imputacion.HR.nicolas <- imputacion(modelos.imputacion$nicolas.arima.hr.imp, HR.nicolas.nuevo, HR.nicolas.historico)
+    imputacion.HR.nicolas <- imputacion(modelos.imputacion$nicolas.hr.imp, HR.nicolas.nuevo, HR.nicolas.historico)
     imputacion.HR.nicolas[imputacion.HR.nicolas  < 0] <- 0
     imputacion.HR.nicolas[imputacion.HR.nicolas  > 100] <- 100
     x$HR[x$sitio == "San Nicolas"] <- imputacion.HR.nicolas
@@ -390,7 +391,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   SR.nicolas.nuevo <- nicolas$SR
   if(any(is.na(nicolas$SR))){
     SR.nicolas.historico <- tabla.historica$SR[tabla.historica$sitio == "San Nicolas"]
-    imputacion.SR.nicolas <- imputacion(modelos.imputacion$nicolas.arima.sr.imp, SR.nicolas.nuevo, SR.nicolas.historico)
+    imputacion.SR.nicolas <- imputacion(modelos.imputacion$nicolas.sr.imp, SR.nicolas.nuevo, SR.nicolas.historico)
     imputacion.SR.nicolas[imputacion.SR.nicolas  < 0] <- 0
     x$SR[x$sitio == "San Nicolas"] <- imputacion.SR.nicolas
   }
@@ -400,7 +401,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WS.nicolas.nuevo <- nicolas$WS
   if(any(is.na(nicolas$WS))){
     WS.nicolas.historico <- tabla.historica$WS[tabla.historica$sitio == "San Nicolas"]
-    imputacion.WS.nicolas <- imputacion(modelos.imputacion$nicolas.arima.ws.imp, WS.nicolas.nuevo, WS.nicolas.historico)
+    imputacion.WS.nicolas <- imputacion(modelos.imputacion$nicolas.ws.imp, WS.nicolas.nuevo, WS.nicolas.historico)
     imputacion.WS.nicolas[imputacion.WS.nicolas  < 0] <- 0
     x$WS[x$sitio == "San Nicolas"] <- imputacion.WS.nicolas
   }
@@ -410,7 +411,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   TOUT.nicolas.nuevo <- nicolas$TOUT
   if(any(is.na(nicolas$TOUT))){
     TOUT.nicolas.historico <- tabla.historica$TOUT[tabla.historica$sitio == "San Nicolas"]
-    imputacion.TOUT.nicolas <- imputacion(modelos.imputacion$nicolas.arima.tout.imp, TOUT.nicolas.nuevo, TOUT.nicolas.historico)
+    imputacion.TOUT.nicolas <- imputacion(modelos.imputacion$nicolas.tout.imp, TOUT.nicolas.nuevo, TOUT.nicolas.historico)
     x$TOUT[x$sitio == "San Nicolas"] <- imputacion.TOUT.nicolas
   }
   
@@ -419,8 +420,8 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WDR.nicolas.nuevo <- nicolas$WDR
   if(any(is.na(nicolas$WDR))){
     WDR.nicolas.historico <- tabla.historica$WDR[tabla.historica$sitio == "San Nicolas"]
-    imputacion.SIN.WDR.nicolas <- imputacion(modelos.imputacion$nicolas.arima.sin.wdr.imp, WDR.nicolas.nuevo, WDR.nicolas.historico)
-    imputacion.COS.WDR.nicolas <- imputacion(modelos.imputacion$nicolas.arima.cos.wdr.imp, WDR.nicolas.nuevo, WDR.nicolas.historico)
+    imputacion.SIN.WDR.nicolas <- imputacion(modelos.imputacion$nicolas.sin.wdr.imp, WDR.nicolas.nuevo, WDR.nicolas.historico)
+    imputacion.COS.WDR.nicolas <- imputacion(modelos.imputacion$nicolas.cos.wdr.imp, WDR.nicolas.nuevo, WDR.nicolas.historico)
     imputacion.WDR.nicolas <- atan2(x = imputacion.COS.WDR.nicolas, y = imputacion.SIN.WDR.nicolas) * 180/pi
     aux <- imputacion.WDR.nicolas < 0
     imputacion.WDR.nicolas[aux] <- imputacion.WDR.nicolas[aux] + 360
@@ -440,7 +441,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   HR.pastora.nuevo <- pastora$HR
   if(any(is.na(pastora$HR))){
     HR.pastora.historico <- tabla.historica$HR[tabla.historica$sitio == "La Pastora"]
-    imputacion.HR.pastora <- imputacion(modelos.imputacion$pastora.arima.hr.imp, HR.pastora.nuevo, HR.pastora.historico)
+    imputacion.HR.pastora <- imputacion(modelos.imputacion$pastora.hr.imp, HR.pastora.nuevo, HR.pastora.historico)
     imputacion.HR.pastora[imputacion.HR.pastora  < 0] <- 0
     imputacion.HR.pastora[imputacion.HR.pastora  > 100] <- 100
     x$HR[x$sitio == "La Pastora"] <- imputacion.HR.pastora
@@ -451,7 +452,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   SR.pastora.nuevo <- pastora$SR
   if(any(is.na(pastora$SR))){
     SR.pastora.historico <- tabla.historica$SR[tabla.historica$sitio == "La Pastora"]
-    imputacion.SR.pastora <- imputacion(modelos.imputacion$pastora.arima.sr.imp, SR.pastora.nuevo, SR.pastora.historico)
+    imputacion.SR.pastora <- imputacion(modelos.imputacion$pastora.sr.imp, SR.pastora.nuevo, SR.pastora.historico)
     imputacion.SR.pastora[imputacion.SR.pastora  < 0] <- 0
     x$SR[x$sitio == "La Pastora"] <- imputacion.SR.pastora
   }
@@ -461,7 +462,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WS.pastora.nuevo <- pastora$WS
   if(any(is.na(pastora$WS))){
     WS.pastora.historico <- tabla.historica$WS[tabla.historica$sitio == "La Pastora"]
-    imputacion.WS.pastora <- imputacion(modelos.imputacion$pastora.arima.ws.imp, WS.pastora.nuevo, WS.pastora.historico)
+    imputacion.WS.pastora <- imputacion(modelos.imputacion$pastora.ws.imp, WS.pastora.nuevo, WS.pastora.historico)
     imputacion.WS.pastora[imputacion.WS.pastora  < 0] <- 0
     x$WS[x$sitio == "La Pastora"] <- imputacion.WS.pastora
   }
@@ -471,7 +472,7 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   TOUT.pastora.nuevo <- pastora$TOUT
   if(any(is.na(pastora$TOUT))){
     TOUT.pastora.historico <- tabla.historica$TOUT[tabla.historica$sitio == "La Pastora"]
-    imputacion.TOUT.pastora <- imputacion(modelos.imputacion$pastora.arima.tout.imp, TOUT.pastora.nuevo, TOUT.pastora.historico)
+    imputacion.TOUT.pastora <- imputacion(modelos.imputacion$pastora.tout.imp, TOUT.pastora.nuevo, TOUT.pastora.historico)
     x$TOUT[x$sitio == "La Pastora"] <- imputacion.TOUT.pastora
   }
   
@@ -480,8 +481,8 @@ imputacion.datos.SIMA <- function(x, tabla.historica, actualizar = TRUE, modelos
   WDR.pastora.nuevo <- pastora$WDR
   if(any(is.na(pastora$WDR))){
     WDR.pastora.historico <- tabla.historica$WDR[tabla.historica$sitio == "La Pastora"]
-    imputacion.SIN.WDR.pastora <- imputacion(modelos.imputacion$pastora.arima.sin.wdr.imp, WDR.pastora.nuevo, WDR.pastora.historico)
-    imputacion.COS.WDR.pastora <- imputacion(modelos.imputacion$pastora.arima.cos.wdr.imp, WDR.pastora.nuevo, WDR.pastora.historico)
+    imputacion.SIN.WDR.pastora <- imputacion(modelos.imputacion$pastora.sin.wdr.imp, WDR.pastora.nuevo, WDR.pastora.historico)
+    imputacion.COS.WDR.pastora <- imputacion(modelos.imputacion$pastora.cos.wdr.imp, WDR.pastora.nuevo, WDR.pastora.historico)
     imputacion.WDR.pastora <- atan2(x = imputacion.COS.WDR.pastora, y = imputacion.SIN.WDR.pastora) * 180/pi
     aux <- imputacion.WDR.pastora < 0
     imputacion.WDR.pastora[aux] <- imputacion.WDR.pastora[aux] + 360
