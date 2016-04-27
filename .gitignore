@@ -29,7 +29,7 @@ scipt_corrida.Rout
 .Rhistory
 .Rapp.history
 # Ignore Workspace image:
-/.RData
+.RData
 # Example code in package build process
 *-Ex.R
 # RStudio files

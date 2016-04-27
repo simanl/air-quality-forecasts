@@ -4,7 +4,7 @@ stSIMA <- function(x, ...)
   UseMethod("stSIMA")
 
 stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado", pesos, 
-                           modelos.pronostico, trans = function(x) log(x + 1), trans.inv = function(x) exp(x) - 1, image){
+                           modelos.pronostico, trans = function(x) log(x + 1), trans.inv = function(x) exp(x) - 1){
   objeto <- list()
   
   if(missing(modelos.pronostico)) stop("Falta 'modelos', el cual no tiene valor predeterminado.")
@@ -50,10 +50,10 @@ stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado
   serie <- paste(contaminante, sitio, sep = "")
   assign(serie[1], objeto)
 
-  if(!missing(image))
-    save(list = serie, file = image)
-    else
-      return(objeto)
+#   if(!missing(image))
+#     save(list = serie, file = image)
+#     else
+  return(objeto)
 }
 
 update.stSIMA <- function(x, tabla.horaria.nueva, modelos.pronostico){
@@ -83,15 +83,37 @@ print.stSIMA <- function(x){
 }
   
 head.stSIMA <- function(x, n = 6L, tabla.horaria = TRUE, ...){
-  if(tabla.horaria) return(head(x$tabla.horaria, n))
-    else return(head(x$historico.periodo, n))
+  if(tabla.horaria) return(head(x$tabla.horaria.sitio, n))
+    else return(head(x$tabla.periodos.sitio, n))
 }
 
 tail.stSIMA <- function(x, n = 6L, tabla.horaria = TRUE, ...){
-  if(tabla.horaria) return(tail(x$tabla.horaria, n))
-    else return(tail(x$historico.periodo, n))
+  if(tabla.horaria) return(tail(x$tabla.horaria.sitio, n))
+    else return(tail(x$tabla.periodos.sitio, n))
 }
 
+summary.stSIMA <- function(x){
+  ultimos <- tail(x, n = 1)
+  cat("\nSitio:\n")
+  cat(" ", x$sitio)
+  cat("\nUltima fecha y hora:\n")
+  cat(" ", paste(as.character(ultimos$fecha), ", ",  as.character(ultimos$hora), " horas.\n", sep = ""))
+}
+
+SAVE <- function(x, ...)
+	UseMethod("SAVE")
+
+SAVE.stSIMA <- function(x, file, tabla = "horaria", tail = TRUE, n = 6){
+	if(tabla == "horaria"){
+		if(tail) write.csv(tail(x, n = n), file, row.names = F)
+			else write.csv(x$tabla.horaria.sitio, file, row.names = F)
+	}
+	else{
+		if(tail) write.csv(tail(x, n = n, F), file, row.names = F)
+			else write.csv(x$tabla.periodos.sitio, file, row.names = F)
+
+	}	
+}
 angulo.prom <- function(theta = 0, w = rep(1, length(theta))){
   theta[which(theta > 359)] <- 0
   coseno <- weighted.mean(cos(theta*pi/180), w)
