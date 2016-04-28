@@ -3,8 +3,8 @@
 stSIMA <- function(x, ...)
   UseMethod("stSIMA")
 
-stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado", pesos, 
-                           modelos.pronostico, trans = function(x) log(x + 1), trans.inv = function(x) exp(x) - 1){
+stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado", pesos, modelos.pronostico,
+    trans = function(x) log(x + 1), trans.inv = function(x) exp(x) - 1){
   objeto <- list()
   
   if(missing(modelos.pronostico)) stop("Falta 'modelos', el cual no tiene valor predeterminado.")
@@ -56,15 +56,36 @@ stSIMA.default <- function(tabla.horaria, contaminante = "O3", sitio = "Obispado
   return(objeto)
 }
 
-update.stSIMA <- function(x, tabla.horaria.nueva, modelos.pronostico){
+update.stSIMA <- function(x, tabla.horaria.nueva, modelos.pronostico, check = TRUE){
   require(data.table)
-# tabla.horaria.nueva.sitio <- tabla.horaria.nueva[tabla.horaria.nueva$sitio == x$sitio, ]
   if(!missing(tabla.horaria.nueva)){
-#     tabla.horaria.sitio.vieja <- x$tabla.horaria.sitio
-	tabla.horaria.nueva.sitio <- tabla.horaria.nueva[tabla.horaria.nueva$sitio == x$sitio, ]
+    tabla.horaria.nueva.sitio <- tabla.horaria.nueva[tabla.horaria.nueva$sitio == x$sitio, ]
+    
+    ##chequeo de consistencia en fechas y horas
+    if(check){
+      ultimo.renglon.anterior <- x$tabla.horaria.sitio[6, ]
+      primer.renglon.nuevo <- tabla.horaria.nueva.sitio[1, ]
+      juliano.anterior <- julian(as.Date(ultimo.renglon.anterior$fecha))
+      juliano.nuevo <- julian(as.Date(primer.renglon.nuevo$fecha))
+      hora.anterior <- as.numeric(ultimo.renglon.anterior$hora)
+      hora.nueva <- as.numeric(primer.renglon.nuevo$hora)
+      mensaje <- paste(": Error en las tablas stSIMA; posible reinicializacion fallida del sistema. Consultar la seccion 5.12 Reinicializacion del Sistema de la Documentacion.")
+      
+      if(hora.anterior == 23){
+	if(hora.nueva != 0 | juliano.anterior + 1 != juliano.nuevo) stop(paste("En sitio ", x$sitio, mensaje, sep = ""))
+      }
+      if(hora.anterior == 5){
+	if(hora.nueva != 6 | juliano.anterior != juliano.nuevo) stop(paste("En sitio ", x$sitio, mensaje, sep = ""))
+      }
+      if(hora.anterior == 11){
+	if(hora.nueva != 12 | juliano.anterior != juliano.nuevo) stop(paste("En sitio ", x$sitio, mensaje, sep = ""))
+      }
+      if(hora.anterior == 17){
+	if(hora.nueva != 18 | juliano.anterior != juliano.nuevo) stop(paste("En sitio ", x$sitio, mensaje, sep = ""))
+      }
+    }
     x$tabla.horaria.sitio <- as.data.frame(rbindlist(list(x$tabla.horaria.sitio, tabla.horaria.nueva.sitio)))
     renglon.nuevo <- renglon.periodo(tabla.horaria.nueva.sitio, contaminante = x$contaminante, pesos = x$pesos)
-#     tabla.periodos.sitio.vieja <- x$tabla.periodos.sitio
     x$tabla.periodos.sitio <- as.data.frame(rbindlist(list(x$tabla.periodos.sitio, renglon.nuevo)))
   }
   else{
@@ -101,19 +122,19 @@ summary.stSIMA <- function(x){
 }
 
 SAVE <- function(x, ...)
-	UseMethod("SAVE")
+  UseMethod("SAVE")
 
 SAVE.stSIMA <- function(x, file, tabla = "horaria", tail = TRUE, n = 6){
-	if(tabla == "horaria"){
-		if(tail) write.csv(tail(x, n = n), file, row.names = F)
-			else write.csv(x$tabla.horaria.sitio, file, row.names = F)
-	}
-	else{
-		if(tail) write.csv(tail(x, n = n, F), file, row.names = F)
-			else write.csv(x$tabla.periodos.sitio, file, row.names = F)
-
-	}	
+  if(tabla == "horaria"){
+    if(tail) write.csv(tail(x, n = n), file, row.names = F)
+      else write.csv(x$tabla.horaria.sitio, file, row.names = F)
+    }
+    else{
+      if(tail) write.csv(tail(x, n = n, F), file, row.names = F)
+	else write.csv(x$tabla.periodos.sitio, file, row.names = F)
+    }
 }
+
 angulo.prom <- function(theta = 0, w = rep(1, length(theta))){
   theta[which(theta > 359)] <- 0
   coseno <- weighted.mean(cos(theta*pi/180), w)
