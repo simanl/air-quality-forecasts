@@ -63,14 +63,13 @@ update.stSIMA <- function(x, tabla.horaria.nueva, modelos.pronostico, check = TR
     
     ##chequeo de consistencia en fechas y horas
     if(check){
-      ultimo.renglon.anterior <- x$tabla.horaria.sitio[6, ]
+      ultimo.renglon.anterior <- x$tabla.horaria.sitio[nrow(x$tabla.horaria.sitio), ]
       primer.renglon.nuevo <- tabla.horaria.nueva.sitio[1, ]
       juliano.anterior <- julian(as.Date(ultimo.renglon.anterior$fecha))
       juliano.nuevo <- julian(as.Date(primer.renglon.nuevo$fecha))
       hora.anterior <- as.numeric(ultimo.renglon.anterior$hora)
       hora.nueva <- as.numeric(primer.renglon.nuevo$hora)
       mensaje <- paste(": Error en las tablas stSIMA; posible reinicializacion fallida del sistema. Consultar la seccion 5.12 Reinicializacion del Sistema de la Documentacion.")
-      
       if(hora.anterior == 23){
 	if(hora.nueva != 0 | juliano.anterior + 1 != juliano.nuevo) stop(paste("En sitio ", x$sitio, mensaje, sep = ""))
       }
