@@ -88,7 +88,17 @@ update.stSIMA <- function(x, tabla.horaria.nueva, modelos.pronostico, check = TR
     x$tabla.periodos.sitio <- as.data.frame(rbindlist(list(x$tabla.periodos.sitio, renglon.nuevo)))
   }
   else{
-    if(!missing(modelos)) x$modelos.pronostico <- modelos.pronostico
+    if(!missing(modelos.pronostico)){
+		if(is.character(modelos.pronostico)){
+			modelos.env <- new.env()
+			load(modelos.pronostico, modelos.env)
+			x$modelos.pronostico <- as.list(modelos.env)
+		}
+		else{
+			if(is.list(modelos.pronostico)) x$modelos.pronostico <- modelos.pronostico
+			else stop("'modelos' es una ruta al directorio de modelos o una lista no vacia con modelos de pronostico")
+		}
+	}
     else
       print("Nada que actualizar!")
     }

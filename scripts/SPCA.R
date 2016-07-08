@@ -71,17 +71,17 @@ SPCA.default <- function(entrada, salida){
   load("tablas/series/PM10Catarina.RData", .GlobalEnv)
 
 ##actualizacion de las series en los objetos stSIMA: periodos y modelos
-  O3Obispado <- update(O3Obispado, tail(imputaciones, 30))
-  O3Pastora <- update(O3Pastora, tail(imputaciones, 30))
-  O3Nicolas <- update(O3Nicolas, tail(imputaciones, 30))
-  O3Bernabe <- update(O3Bernabe, tail(imputaciones, 30))
-  O3Catarina <- update(O3Catarina, tail(imputaciones, 30))
+  O3Obispado <- update(O3Obispado, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/O3Obispado_mod_pron.RData")
+  O3Pastora <- update(O3Pastora, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/O3Pastora_mod_pron.RData")
+  O3Nicolas <- update(O3Nicolas, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/O3Nicolas_mod_pron.RData")
+  O3Bernabe <- update(O3Bernabe, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/O3Bernabe_mod_pron.RData")
+  O3Catarina <- update(O3Catarina, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/O3Catarina_mod_pron.RData")
 
-  PM10Obispado <- update(PM10Obispado, tail(imputaciones, 30))
-  PM10Pastora <- update(PM10Pastora, tail(imputaciones, 30))
-  PM10Nicolas <- update(PM10Nicolas, tail(imputaciones, 30))
-  PM10Bernabe <- update(PM10Bernabe, tail(imputaciones, 30))
-  PM10Catarina <- update(PM10Catarina, tail(imputaciones, 30))
+  PM10Obispado <- update(PM10Obispado, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/PM10Obispado_mod_pron.RData")
+  PM10Pastora <- update(PM10Pastora, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/PM10Pastora_mod_pron.RData")
+  PM10Nicolas <- update(PM10Nicolas, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/PM10Nicolas_mod_pron.RData")
+  PM10Bernabe <- update(PM10Bernabe, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/PM10Bernabe_mod_pron.RData")
+  PM10Catarina <- update(PM10Catarina, tail(imputaciones, 30), "/modelos/modelos_de_pronostico/PM10Catarina_mod_pron.RData")
 
 ##asignaciones para recuperarlas en post()
   assign("O3Obispado", O3Obispado, envir = .GlobalEnv)
