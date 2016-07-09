@@ -4,7 +4,8 @@ set -e
 : ${APP_PATH:="$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd ))"}
 : ${TMP_PATH:="${APP_PATH}/tmp"}
 : ${TAR_PATH:="${TMP_PATH}/sample-data-csvs.tar.bz2"}
-: ${TAR_URL:="https://www.dropbox.com/s/39d36j27a0dgssu/sample-data-csvs.tar.bz2?dl=0"}
+
+TAR_URL=${1:-"https://www.dropbox.com/s/ocne6z8xmennu9y/fake-data-2016-06-01.tar.bz2?dl=0"}
 
 wget -O ${TAR_PATH} ${TAR_URL} && tar xvf ${TAR_PATH} --no-same-owner -C ${TMP_PATH}
 rm -rf ${TAR_PATH}

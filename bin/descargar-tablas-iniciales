@@ -1,12 +1,14 @@
 #! /bin/bash
 set -e
-DEFAULT_TAR_URL="https://www.dropbox.com/s/u5obj9wbfuqbrzp/tablas-iniciales.tar.bz2?dl=0"
-TAR_URL=${1:-$DEFAULT_TAR_URL}
 
 : ${APP_PATH:="$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd ))"}
-: ${TAR_PATH:="${APP_PATH}/tmp/tablas-iniciales.tar.bz2"}
-: ${TAR_URL:="https://www.dropbox.com/s/u5obj9wbfuqbrzp/tablas-iniciales.tar.bz2?dl=0"}
-: ${TABLES_PATH:="${APP_PATH}/tablas"}
+: ${TMP_PATH:="${APP_PATH}/tmp"}
+: ${TAR_PATH:="${TMP_PATH}/tablas-iniciales.tar.bz2"}
 
-wget -O ${TAR_PATH} ${TAR_URL} && tar xvf ${TAR_PATH} --no-same-owner -C ${TABLES_PATH}
+TAR_URL=${1:-"https://www.dropbox.com/s/vsju1chtqsncm4w/2016-04-30T23.tar.bz2?dl=0"}
+
+wget -O ${TAR_PATH} ${TAR_URL} && tar xvf ${TAR_PATH} --no-same-owner -C "${APP_PATH}/tablas"
 rm -rf ${TAR_PATH}
+
+# CREATE the archives with the following:
+# cd DIRNAME ; BZIP2=-9 tar cjvf ../`basename $(pwd)`.tar.bz2 * ; cd ..
