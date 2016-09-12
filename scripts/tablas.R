@@ -118,16 +118,10 @@ nas.ok.default <- function(x, ...){
   rachas <- rle(x)
   nas <- as.logical(rachas$values)
   long <- rachas$lengths
-print(all(!nas))
-print(any(long[nas])>=24)
   if(all(!nas)) return(TRUE)
-cat("\npaso 1\n")
   if(any(long[nas]>=24)){
-cat("\npaso 2\n")
-#       aux1 <- x[1:24]
       aux1 <- x[25:48]
       aux2 <- x[49:72]
-print(sum(aux1) == 0 && sum(aux2) == 0)
       if(sum(aux1) == 0 && sum(aux2) == 0) return(TRUE)
 	else return(FALSE)
   }
