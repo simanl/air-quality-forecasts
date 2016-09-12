@@ -87,6 +87,19 @@ post <- function(sistema = "nix"){
   save(PM10Nicolas, file = "tablas/series/PM10Nicolas.RData")
   cat("\n 24. Ultima actualizacion de la PM10Nicolas.RData:", date())
   sink()
+
+  if(file.exists("tablas/pronosticos/tablas.salida.RData")){
+    load("tablas/pronosticos/tablas.salida.RData")
+    system(paste("cp '", SPCA_HOME, "/tablas/pronosticos/tablas.salida.RData' '", SPCA_HOME, "/tablas/pronosticos/tablas.salida.RData.bkp'", sep = ""), intern = T)
+    tablas.salida[[length(tablas.salida) + 1]] <- tabla.salida
+    save(tablas.salida, file = "tablas/pronosticos/tablas.salida.RData")
+  }
+  else{
+   tablas.salida <- list()
+   tablas.salida[[1]] <- tabla.salida
+   save(tablas.salida, file = "tablas/pronosticos/tablas.salida.RData")
+  }
+  
   if(file.exists("tablas/pronosticos/O3Obispado.lista.pronostico.RData")){
     load("tablas/pronosticos/O3Obispado.lista.pronostico.RData")
     system(paste("cp '", SPCA_HOME, "/tablas/pronosticos/O3Obispado.lista.pronostico.RData' '", SPCA_HOME, "/tablas/pronosticos/O3Obispado.lista.pronostico.RData.bkp'", sep = ""), intern = T)

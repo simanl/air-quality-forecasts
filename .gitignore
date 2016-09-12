@@ -54,3 +54,5 @@ tmp/*
 # Browser files:
 /.directory
 ejemplos/ruby-client/tmp/*
+#corridas locales
+corrida_local.R

@@ -147,28 +147,47 @@ cat("PM10 Catarina\n")
   ventana <- 72*5 #72 horas por cinco sitios
   tabla.maestra.reciente <- tabla.maestra[(nrow(tabla.maestra) - ventana + 1):nrow(tabla.maestra), ] #para validacion de nas
   O3Obispado.pronostico.salida <- tablaSalida(O3Obispado, O3Obispado.pronostico, norma = c(0, 70, 95, 154, 204, Inf)) #tabla de salida
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "Obispado", "O3"])) O3Obispado.pronostico.salida$pronostico <- NA #no se publica si se excede de nas
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "Obispado", "O3"])){ 
+    O3Obispado.pronostico.salida$categoria <- O3Obispado.pronostico.salida$pronostico <- NA #no se publica si se excede de nas
+  }
   O3Pastora.pronostico.salida <- tablaSalida(O3Pastora, O3Pastora.pronostico, norma = c(0, 70, 95, 154, 204, Inf)) #...
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "La Pastora", "O3"])) O3Pastora.pronostico.salida$pronostico <- NA
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "La Pastora", "O3"])){
+    O3Pastora.pronostico.salida$categoria <- O3Pastora.pronostico.salida$pronostico <- NA
+  }
   O3Nicolas.pronostico.salida <- tablaSalida(O3Nicolas, O3Nicolas.pronostico, norma = c(0, 70, 95, 154, 204, Inf))
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "San Nicolas", "O3"])) O3Nicolas.pronostico.salida$pronostico <- NA
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "San Nicolas", "O3"])){
+    O3Nicolas.pronostico.salida$categoria <- O3Nicolas.pronostico.salida$pronostico <- NA
+  }
   O3Bernabe.pronostico.salida <- tablaSalida(O3Bernabe, O3Bernabe.pronostico, norma = c(0, 70, 95, 154, 204, Inf))
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "San Bernabe", "O3"])) O3Bernabe.pronostico.salida$pronostico <- NA
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "San Bernabe", "O3"])){
+    O3Bernabe.pronostico.salida$categoria <- O3Bernabe.pronostico.salida$pronostico <- NA
+  }  
   O3Catarina.pronostico.salida <- tablaSalida(O3Catarina, O3Catarina.pronostico, norma = c(0, 70, 95, 154, 204, Inf))
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "Santa Catarina", "O3"])) O3Catarina.pronostico.salida$pronostico <- NA
- 
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "Santa Catarina", "O3"])){
+    O3Catarina.pronostico.salida$categoria <- O3Catarina.pronostico.salida$pronostico <- NA
+  }
   tabla.salida.O3 <- cbind(data.frame(contaminante = "O3"), rbind(O3Obispado.pronostico.salida, O3Pastora.pronostico.salida, O3Nicolas.pronostico.salida, O3Bernabe.pronostico.salida, O3Catarina.pronostico.salida))
 
   PM10Obispado.pronostico.salida <- tablaSalida(PM10Obispado, PM10Obispado.pronostico, norma = c(0, 40, 75, 214, 354, Inf))
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "Obispado", "PM10"])) PM10Obispado.pronostico.salida$pronostico <- NA  
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "Obispado", "PM10"])){ 
+    PM10Obispado.pronostico.salida$categoria <- PM10Obispado.pronostico.salida$pronostico <- NA  #no se publica si se excede de nas
+  } 
   PM10Pastora.pronostico.salida <- tablaSalida(PM10Pastora, PM10Pastora.pronostico, norma = c(0, 40, 75, 214, 354, Inf))
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "La Pastora", "PM10"])) PM10Pastora.pronostico.salida$pronostico <- NA
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "La Pastora", "PM10"])){
+    PM10Pastora.pronostico.salida$categoria <- PM10Pastora.pronostico.salida$pronostico <- NA
+  }
   PM10Nicolas.pronostico.salida <- tablaSalida(PM10Nicolas, PM10Nicolas.pronostico, norma = c(0, 40, 75, 214, 354, Inf))
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "San Nicolas", "PM10"])) PM10Nicolas.pronostico.salida$pronostico <- NA  
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "San Nicolas", "PM10"])){
+    PM10Nicolas.pronostico.salida$categoria <- PM10Nicolas.pronostico.salida$pronostico <- NA
+  }  
   PM10Bernabe.pronostico.salida <- tablaSalida(PM10Bernabe, PM10Bernabe.pronostico, norma = c(0, 40, 75, 214, 354, Inf))
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "San Bernabe", "PM10"])) PM10Bernabe.pronostico.salida$pronostico <- NA
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "San Bernabe", "PM10"])){
+    PM10Bernabe.pronostico.salida$categoria <- PM10Bernabe.pronostico.salida$pronostico <- NA
+  }
   PM10Catarina.pronostico.salida <- tablaSalida(PM10Catarina, PM10Catarina.pronostico, norma = c(0, 40, 75, 214, 354, Inf))
-  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "Santa Catarina", "PM10"])) PM10Catarina.pronostico.salida$pronostico <- NA 
+  if(!nas.ok(tabla.maestra.reciente[tabla.maestra.reciente$sitio == "Santa Catarina", "PM10"])){
+    PM10Catarina.pronostico.salida$categoria <- PM10Catarina.pronostico.salida$pronostico <- NA
+  } 
   
   tabla.salida.PM10 <- cbind(data.frame(contaminante = "PM10"), rbind(PM10Obispado.pronostico.salida, PM10Pastora.pronostico.salida, PM10Nicolas.pronostico.salida, PM10Bernabe.pronostico.salida, PM10Catarina.pronostico.salida))
   
@@ -179,7 +198,7 @@ cat("PM10 Catarina\n")
   tabla.salida.PM2.5$categoria <- NA
   
   ##tabla de salida completa
-  tabla.salida <- rbind(tabla.salida.O3, tabla.salida.PM10, tabla.salida.PM2.5)
+  tabla.salida <<- rbind(tabla.salida.O3, tabla.salida.PM10, tabla.salida.PM2.5)
   
   if(missing(salida)) return(tabla.salida)
    else write.csv(tabla.salida, salida, row.names = F)
